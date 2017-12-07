@@ -1,0 +1,12 @@
+{
+    "name": "StefanTheBlade/esup",
+    "type": "kohana-module",
+    "description": "Control panel for PHP Kohana or Koseven frameworks",
+    "keywords": ["control panel", "crud", "admin", "administrator", "kohana", "koseven"],
+    "homepage": "https://github.com/StefanTheBlade/esup",
+    "require": {
+        "php": ">=7.0",
+        "studio-42/elfinder": "2.1.*",
+        "composer/installers": "~1.0"
+    }
+}
