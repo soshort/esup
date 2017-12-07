@@ -1,5 +1,5 @@
 {
-    "name": "StefanTheBlade/esup",
+    "name": "stefan-the-blade/esup",
     "type": "kohana-module",
     "description": "Control panel for PHP Kohana or Koseven frameworks",
     "keywords": ["control panel", "crud", "admin", "administrator", "kohana", "koseven"],
