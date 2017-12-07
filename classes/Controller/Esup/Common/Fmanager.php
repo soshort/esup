@@ -7,6 +7,7 @@ class Controller_Esup_Common_Fmanager extends Controller_Esup_Common {
 	}
 
 	public function action_init() {
+		require DOCROOT.'vendor/studio-42/elfinder/php/autoload.php';
 		error_reporting(0);
 		function access($attr, $path, $data, $volume) {
 			return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
