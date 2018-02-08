@@ -2,8 +2,7 @@
  
 class Model_Esup extends ORM {
 
-    static $postfix = '';
-    static $cache_instance;
+    public static $postfix = '';
 
     protected $list_filtered = FALSE;
 
@@ -54,14 +53,14 @@ class Model_Esup extends ORM {
     }
 
     /* Возвращает форматированную дату */
-    public function format_date($ts_field, $text, $lang) {
-        $date_str = date('d F, Y', $this->$ts_field);
-        $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-        $required_months = array($text['yanvar'], $text['fevral'], $text['mart'], $text['aprel'], $text['maj'], $text['iyun'], $text['iyul'], $text['avgust'], $text['sentyabr'], $text['oktyabr'], $text['noyabr'], $text['dekabr']);
-        return str_replace($months, $required_months, date('d F, Y', $this->$ts_field));
+    public function format_date($ts_field, $text, $format = 'd F, Y') {
+        $date_str = date($format, $this->$ts_field);
+        $search = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+        $replace = array($text['january'], $text['february'], $text['march'], $text['april'], $text['may'], $text['june'], $text['july'], $text['august'], $text['september'], $text['october'], $text['november'], $text['december']);
+        return mb_strtolower(str_ireplace($search, $replace, date($format, $this->$ts_field)));
     }
 
-    /* Возвращает сслыку для внутренней страницы, лтбо на внешний ресурс */
+    /* Возвращает сслыку для внутренней страницы, либо на внешний ресурс */
     public function get_link($lang) {
         if ($this->page->loaded()) {
             return '/'.$lang.'/'.$this->page->link;
@@ -82,24 +81,32 @@ class Model_Esup extends ORM {
         }
     }
 
-    /* Возвращает изображения для модели */
-    public function get_images($table_name, $main = FALSE) {
-        $images = $this->files->where('table_name', '=', $table_name);
-        if ($main) {
-            $images = $images->and_where('main', '=', 1)
-                ->find();
-            return ($images->loaded()) ? $images : $this->get_first_image($table_name);
-        } else {
-            return $images->find_all();
-        }
+    /* Возвращает связанные с моделью файлы */
+    public function get_files($table_name) {
+        return $this->files->where('table_name', '=', $table_name)
+            ->find_all();
     }
 
-    /* Возвращает первое попавшееся изображение для модели */
-    public function get_first_image($table_name) {
+    /* Возвращает основной файл для модели (или первый попавшийся, если основной не указан) */
+    public function get_file($table_name) {
+        $file = $this->files->where('table_name', '=', $table_name)
+            ->and_where('main', '=', 1)
+            ->find();
+        return ($file->loaded()) ? $file : $this->get_first_file($table_name);
+    }
+
+    /* Возвращает первый попавшийся файл для модели */
+    public function get_first_file($table_name) {
         return $this->files->where('table_name', '=', $table_name)
             ->order_by('sort', 'ASC')
             ->limit(1)
             ->find();
+    }
+
+    /* Возвращает url адрес изображения */
+    public function get_file_url($prefix = NULL, $dummy = TRUE) {
+        $file_name = (empty($prefix)) ? $this->file : $prefix.'_'.$this->file;
+        return ($this->loaded()) ? '/static/uploads/files/'.$file_name : (($dummy) ? '/static/images/no_photo.png' : '');
     }
 
     /* Получение данных вместе с привязанными галереями */
@@ -118,6 +125,9 @@ class Model_Esup extends ORM {
     /* Заполнение модели данными из формы */
     public function fill($fields) {
         foreach ($fields as $key => $item) {
+            if (isset($item['edit']) && $item['edit'] == FALSE) {
+                continue;
+            }
             $post_item = Arr::get($_POST, $key);
             switch ($item['type']) {
                 case 'uuid':

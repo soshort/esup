@@ -42,21 +42,23 @@ class Model_Esup_Common_Text extends Model_Esup {
 	public function clear_text_cache() {
 		$languages = ORM::factory('Esup_Common_Language')
 			->find_all();
-		self::$cache_instance->delete(CP.'orm_sitetext_all');
+		$cache_instance = Cache::instance(CACHE_DRIVER);
+		$cache_instance->delete(CP.'orm_sitetext_all');
 		foreach ($languages as $key => $language) {
-			self::$cache_instance->delete(CP.'orm_sitetext_all_'.$language->key);
+			$cache_instance->delete(CP.'orm_sitetext_all_'.$language->key);
 		}
 	}
 
     /* Возвращает статичный текст сайт из базы данных */
     public function get_text() {
-        $result = self::$cache_instance->get(CP.'orm_sitetext_all'.self::$postfix);
+    	$cache_instance = Cache::instance(CACHE_DRIVER);
+        $result = $cache_instance->get(CP.'orm_sitetext_all'.self::$postfix);
         if ($result) {
             $data_source = $result;
         }
         if (empty($data_source)) {
             $data_source = $this->_get_text();
-            self::$cache_instance->set(CP.'orm_sitetext_all'.self::$postfix, $data_source);
+            $cache_instance->set(CP.'orm_sitetext_all'.self::$postfix, $data_source);
         }
         return $data_source;
     }

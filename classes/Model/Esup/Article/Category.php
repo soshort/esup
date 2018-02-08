@@ -17,8 +17,8 @@ class Model_Esup_Article_Category extends Model_Esup {
     public $options = array(
         /* Поля БД */
         'fields' => array(
-            'visible' => array(
-                'label' => 'Показывать',
+            'active' => array(
+                'label' => 'Активен',
                 'type' => 'checkbox',
             ),
             'title' => array(

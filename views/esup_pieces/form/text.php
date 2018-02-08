@@ -1,8 +1,8 @@
-<div class="form-group">
-	<label for="form_<?php echo $key ?>" class="col-sm-2 control-label">
+<div class="form-group row">
+	<label for="form_<?php echo $key ?>" class="col-sm-2 col-form-label">
 		<?php echo $field['label'] ?>
 		<?php if (isset($field['hint'])): ?>
-			<a href="javascript:0" data-toggle="tooltip" data-placement="top" title="<?php echo $field['hint'] ?>">?</a>
+			<a href="javascript:0" data-toggle="tooltip" data-placement="top" title="<?php echo $field['hint'] ?>"><span class="octicon octicon-question"></span></a>
 		<?php endif ?>
 	</label>
 	<div class="col-sm-10">

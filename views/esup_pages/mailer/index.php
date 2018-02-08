@@ -20,11 +20,9 @@
 					<?php foreach ($list as $key => $item): ?>
 						<tr>
 							<td><input type="checkbox" class="multiple-item" value="<?php echo $item->id ?>"></td>
+							<td><?php echo $item->id ?></td>
 							<td>
-								<?php echo $item->id ?>
-							</td>
-							<td>
-								<?php if ($item->_to[0] == '{' || $item->_to[0] == '['): ?>
+								<?php if (empty($item->_to) == FALSE && ($item->_to[0] == '{' || $item->_to[0] == '[')): ?>
 									<a href="/esup/mailer/view/<?php echo $item->id.$url_query ?>">
 										<?php $arr = json_decode($item->_to, TRUE); foreach ($arr as $e_key => $email): ?>
 											<?php echo $email; echo (count($arr) == $e_key + 1) ? ',' : '' ?>
@@ -38,19 +36,18 @@
 							</td>
 							<td>
 								<?php if ($item->status == 0): ?>
-									<span class="label label-default">Не отправлено</span>
-									<a href="/esup/mailer/send/<?php echo $item->id.$url_query ?>" class="label_link">Отправить</a>
+									<span class="badge badge-secondary">Не отправлено</span>
+									<a href="/esup/mailer/send/<?php echo $item->id.$url_query ?>">Отправить</a>
 								<?php elseif ($item->status == 1): ?>
-									<span class="label label-success">Отправлено</span>
+									<span class="badge badge-success">Отправлено</span>
 								<?php elseif ($item->status == 2): ?>
-									<span class="label label-danger">Ошибка</span>
-									<a href="/esup/mailer/send/<?php echo $item->id.$url_query ?>" class="label_link">Отправить</a>
+									<span class="badge badge-danger">Ошибка</span>
+									<a href="/esup/mailer/send/<?php echo $item->id.$url_query ?>">Отправить</a>
 								<?php endif ?>
 							</td>
 							<td>
-								<a href="/esup/mailer/delete/<?php echo $item->id.$url_query ?>" class="pull-right red-link">
-									<span class="glyphicon glyphicon-trash"></span>
-								</a>
+								<div class="d-flex justify-content-end">
+								<a href="/esup/mailer/delete/<?php echo $item->id.$url_query ?>" class="red-link"><span class="octicon octicon-trashcan"></span></a>
 							</td>
 						</tr>
 					<?php endforeach ?>
@@ -61,14 +58,13 @@
 				<button name="action" value="delete" class="btn btn-danger multiple-delete" disabled>Удалить выбранные</button>
 			</form>
 		<?php else: ?>
-			<div style="margin-bottom: 20px">
+			<div class="no-records-found">
 				Нет записей для отображения в этом виде.
 			</div>
 		<?php endif ?>
-		<?php echo Pagination::factory(array(
-			'view' => 'esup_pieces/pagination/floating',
+		<?php echo View::factory('esup_pieces/pagination', array(
 			'total_items' => $total_items,
-			'items_per_page' => $items_per_page,
+			'items_per_page' => $items_per_page,			
 		)) ?>
 	</div>
 </div>

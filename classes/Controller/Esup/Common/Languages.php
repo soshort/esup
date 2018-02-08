@@ -5,6 +5,13 @@ class Controller_Esup_Common_Languages extends Controller_Esup_Common_Crud {
 	public $access_level = 10;
 	public $model_name = 'Esup_Common_Language';
 
+	private $cache_instance;
+
+	public function before() {
+		parent::before();
+		$this->cache_instance = Cache::instance(CACHE_DRIVER);
+	}
+
 	public function action_add() {
 		$model = ORM::factory('Esup_Common_Language');
 		if (isset($_POST['add'])) {
@@ -32,7 +39,7 @@ class Controller_Esup_Common_Languages extends Controller_Esup_Common_Crud {
 			}
 			$this->redirect('esup/languages');
 		} else {
-			$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/add_form')
+			$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/add')
 				->set('model', $model);
 		}
 	}
@@ -66,7 +73,7 @@ class Controller_Esup_Common_Languages extends Controller_Esup_Common_Crud {
 			}
 			$this->redirect('esup/languages/edit/'.$model->id);
 		}
-		$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/edit_form')
+		$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/edit')
 			->set('model', $model);
 	}
 

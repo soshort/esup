@@ -12,6 +12,10 @@ class Model_Esup_Page extends Model_Esup {
 
 	public $options = array(
 		'fields' => array(
+            'active' => array(
+                'label' => 'Активен',
+                'type' => 'checkbox'
+            ),
 			'title' => array(
 				'label' => 'Заголовок',
 				'type' => 'text',
@@ -48,7 +52,7 @@ class Model_Esup_Page extends Model_Esup {
 				'label' => 'Meta description',
 				'type' => 'text',
 				'translate' => TRUE
-			),
+			)
 		),
 		'filters' => array(
 			'search_query' => array(

@@ -2,15 +2,19 @@
 
 class Controller_Esup_Common_Settings extends Controller_Esup_Common_Crud {
 
-	protected $css_full_name = 'static/user.css';
-	protected $js_full_name = 'static/user.js';
-	protected $logo_path = 'static/images';
-	protected $logo_name = 'logo.png';
-	protected $favicon_name = 'favicon.ico';
-	protected $archive_path = 'modules/kazkom/vendor';
-	protected $archive_name = 'archive.zip';
+	private $cache_instance;
+	private $css_full_name = 'static/css/user.css';
+	private $js_full_name = 'static/js/user.js';
+	private $logo_path = 'static/images';
+	private $logo_name = 'logo.png';
+	private $favicon_name = 'favicon.ico';
 
 	public $model_name = 'Esup_Common_Settings';
+
+	public function before() {
+		parent::before();
+		$this->cache_instance = Cache::instance(CACHE_DRIVER);
+	}
 
 	public function action_add() {
 		if ($this->request->post('add')) {
@@ -86,35 +90,37 @@ class Controller_Esup_Common_Settings extends Controller_Esup_Common_Crud {
 
 	public function action_epay() {
 		$model = ORM::factory($this->model_name);
-		$zip_loaded = (extension_loaded('zip')) ? TRUE : FALSE;
-		$keys_folder = DOCROOT.$this->archive_path.'/keys/';
+		$production_path = DOCROOT.'kkb/production';
+		$zip_loaded = extension_loaded('zip');
 		$test_mode = ORM::factory($this->model_name, array('name' => 'epay_test_mode'));
 		if ($this->request->post('save') && $zip_loaded) {
 			try {
 				if ($_FILES['archive']['error'] == 0) {
-					$temp_archive_name = Upload::save($_FILES['archive'], $this->archive_name, DOCROOT.$this->archive_path);
-					$this->rrmdir($keys_folder);
-					mkdir($keys_folder, 0755, TRUE);
+					$temp_file = Upload::save($_FILES['archive'], 'temp.zip', DOCROOT.'kkb');
+					$this->rrmdir($production_path);
+					mkdir($production_path, 0755, TRUE);
 					$zip = new ZipArchive;
-					$zip->open($temp_archive_name);
-					$zip->extractTo($keys_folder);
+					$zip->open($temp_file);
+					$zip->extractTo($production_path);
 					$zip->close();
-					if (is_file($temp_archive_name)) {
-						unlink($temp_archive_name);
+					if (is_file($temp_file)) {
+						unlink($temp_file);
 					}
-					$config_array = parse_ini_file(DOCROOT.$this->archive_path.'/keys/config.txt');
-					foreach ($config_array as $key => $item) {
-						if ($key == 'PRIVATE_KEY_FN') {
-							$config_array[$key] = str_replace('../paysys/', $this->archive_path.'/keys/', $item);
-						} elseif ($key == 'XML_TEMPLATE_FN') {
-							$config_array[$key] = str_replace('../paysys/', $this->archive_path.'/', $item);
+					$config_ini = parse_ini_file(DOCROOT.'kkb/production/config.txt');
+					$config_array = array();
+					foreach ($config_ini as $key => $item) {
+						if ($key == 'XML_TEMPLATE_FN') {
+							$config_array[$key] = DOCROOT.'kkb/template.xml';
 						} elseif ($key == 'XML_COMMAND_TEMPLATE_FN') {
-							$config_array[$key] = str_replace('../paysys/', $this->archive_path.'/', $item);
-						} elseif ($key == 'PUBLIC_KEY_FN') {
-							$config_array[$key] = str_replace('../paysys/', $this->archive_path.'/keys/', $item);
+							$config_array['XML_TEMPLATE_CONFIRM_FN'] = DOCROOT.'kkb/template_confirm.xml';
+						} elseif ($key == 'PRIVATE_KEY_FN' || $key == 'PUBLIC_KEY_FN') {
+							$config_array[$key] = DOCROOT.'kkb/production/'.basename($item);
+						} else {
+							$config_array[$key] = $item;
 						}
 					}
-					$this->write_ini_file($config_array, DOCROOT.$this->archive_path.'/keys/config.txt');
+					$config_array['PRIVATE_KEY_ENCRYPTED'] = 1;
+					$this->write_ini_file($config_array, DOCROOT.'kkb/production/config.txt');
 				}
 				$test_mode->value = (isset($_POST['test_mode'])) ? 1 : 0;
 				$test_mode->save();

@@ -15,40 +15,20 @@
 	<?php echo $model->options['render']['title'] ?> — <?php echo $action_title ?>
 	<a href="/esup/<?php echo $model->options['render']['link'].$url_query ?>">Назад к списку</a>
 </h3>
-<form class="form-horizontal" role="form" action="<?php echo $action_link ?>" enctype="multipart/form-data" method="post" id="main_form">
+<form role="form" action="<?php echo $action_link ?>" enctype="multipart/form-data" method="post" id="main_form">
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="#main" data-toggle="tab">Основные поля</a></li>
+		<li class="nav-item"><a href="#main" class="nav-link active" data-toggle="tab">Основные поля</a></li>
 		<?php if (isset($model->options['files'])): ?>
-			<li><a href="#files" data-toggle="tab">Файлы</a></li>
+			<li class="nav-item"><a class="nav-link" href="#files" data-toggle="tab">Файлы</a></li>
 		<?php endif ?>
 		<?php if (isset($model->options['many_to_many'])): ?>
-			<li><a href="#many_to_many" data-toggle="tab">Много ко многим</a></li>
+			<li class="nav-item"><a class="nav-link" href="#many_to_many" data-toggle="tab">Много ко многим</a></li>
 		<?php endif ?>
 	</ul>
-	<div class="tab-content" style="margin-top: 20px">
+	<div class="tab-content">
 		<div class="tab-pane active" id="main">
 			<?php foreach ($model->options['fields'] as $field_key => $field): ?>
-				<?php if ($field['type'] == 'text'): ?>
-					<?php echo View::factory('esup_pieces/form/text', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php elseif ($field['type'] == 'ckeditor'): ?>
-					<?php echo View::factory('esup_pieces/form/ckeditor', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php elseif ($field['type'] == 'textarea'): ?>
-					<?php echo View::factory('esup_pieces/form/textarea', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php elseif ($field['type'] == 'select'): ?>
-					<?php echo View::factory('esup_pieces/form/select', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php elseif ($field['type'] == 'belongs_to'): ?>
-					<?php echo View::factory('esup_pieces/form/belongs_to', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php elseif ($field['type'] == 'date'): ?>
-					<?php echo View::factory('esup_pieces/form/date', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php elseif ($field['type'] == 'map'): ?>
-					<?php echo View::factory('esup_pieces/form/map', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php elseif ($field['type'] == 'checkbox'): ?>
-					<?php echo View::factory('esup_pieces/form/checkbox', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php elseif ($field['type'] == 'password'): ?>
-					<?php echo View::factory('esup_pieces/form/password', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php elseif ($field['type'] == 'html'): ?>
-					<?php echo View::factory('esup_pieces/form/html', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
-				<?php endif ?>
+				<?php echo View::factory('esup_pieces/form/'.$field['type'], array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
 			<?php endforeach ?>
 		</div>
 		<?php if (isset($model->options['files'])): ?>
@@ -66,23 +46,21 @@
 			</div>
 		<?php endif ?>
 	</div>
-	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
+	<div class="form-group row">
+		<div class="offset-sm-2 col-sm-10">
 			<?php if (Request::$initial->action() == 'add'): ?>
 				<input type="submit" class="btn btn-primary" name="add" value="Добавить">
 			<?php else: ?>
 				<input type="submit" class="btn btn-primary" name="edit" value="Сохранить">
 			<?php endif ?>
 			<a href="/esup/<?php echo $model->options['render']['link'].$url_query ?>">
-				<input type="button" class="btn btn-default" value="Отмена">
+				<input type="button" class="btn btn-secondary" value="Отмена">
 			</a>
 		</div>
 	</div>
 </form>
 <?php if (isset($model->options['render']['hint'])): ?>
-	<div class="alert alert-warning">
-		<a href="#" class="alert-link"><?php echo $model->options['render']['hint'] ?></a>
-	</div>
+	<div class="alert alert-warning"><?php echo $model->options['render']['hint'] ?></div>
 <?php endif ?>
 <script type="text/javascript">
 	$(function(){
@@ -101,19 +79,18 @@
 
 		/* Календарь */
 		$('.datepicker').datepicker({
-			dateFormat: 'dd-mm-yy',
-		    onSelect: function(datetext){
-		        var d = new Date();
-		        var h = (d.getHours() < 10 ? '0' : '') + d.getHours();
-		        var m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-		        var s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
-		        datetext = datetext + " " + h + ":" + m + ":" + s;
-		        $(this).val(datetext);
+			dateFormat: 'dd.mm.yy',
+		    onSelect: function(datetext, inst){
+		    	if ($(inst.input).is('.with-time')) {
+			        var d = new Date();
+			        var h = (d.getHours() < 10 ? '0' : '') + d.getHours();
+			        var m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+			        var s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
+			        datetext = datetext + " " + h + ":" + m + ":" + s;
+			        $(this).val(datetext);
+		    	}
 		    },
 		}, $.datepicker.regional['ru']);
-
-		/* Tooltip */
-		$('[data-toggle="tooltip"]').tooltip();
 
 		/* Ckeditor */
 		CKEDITOR.plugins.addExternal('imagepaste', '/static/lib/ckeditor/custom/plugins/imagepaste/', 'plugin.js');

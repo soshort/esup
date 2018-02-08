@@ -58,13 +58,14 @@ class Model_Esup_Common_Settings extends Model_Esup {
 	}
 
     public function get_config_db() {
-        $result = self::$cache_instance->get(CP.'config_db_site');
+    	$cache_instance = Cache::instance(CACHE_DRIVER);
+        $result = $cache_instance->get(CP.'config_db_site');
         if ($result) {
             $data_source = $result;
         }
         if (empty($data_source)) {
             $data_source = $this->_get_config_db();
-            self::$cache_instance->set(CP.'config_db_site', $data_source);
+            $cache_instance->set(CP.'config_db_site', $data_source);
         }
         return $data_source;
     }

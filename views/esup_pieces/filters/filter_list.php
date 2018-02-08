@@ -1,6 +1,6 @@
-<div class="panel panel-primary filter-list">
-	<div class="panel-heading"><h3 class="panel-title">Фильтры</h3></div>
-	<div class="panel-body" <?php echo (Arr::get($_GET, 'filters') == 'show') ? '' : 'style="display: none"' ?>>
+<div class="card bg-light filter-list">
+	<div class="card-header border-0 rounded">Фильтры</div>
+	<div class="card-body" <?php echo (Arr::get($_GET, 'filters') == 'show') ? '' : 'style="display: none"' ?>>
 		<form action="/esup/<?php echo $model->options['render']['link'] ?>" method="get">
 			<?php foreach ($model->options['filters'] as $filter_key => $filter): ?>
 				<?php if ($filter['type'] == 'select'): ?>
@@ -18,13 +18,13 @@
 			<?php endif ?>
 			<input type="hidden" name="filters" value="show">
 			<input type="submit" class="btn btn-primary" value="Применить">
-			<a href="/esup/<?php echo $model->options['render']['link'] ?>" class="btn btn-default">Сбросить</a>
+			<a href="/esup/<?php echo $model->options['render']['link'] ?>"><button class="btn btn-secondary" type="button">Сбросить</button></a>
 		</form>
 	</div>
 </div>
 <script type="text/javascript">
 	$(function(){
-		$(document).on('click', '.filter-list .panel-heading', function(){
+		$(document).on('click', '.filter-list .card-header', function(){
 			var t = $(this);
 			t.next().slideToggle(200);
 		});

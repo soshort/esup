@@ -25,17 +25,15 @@
 							<td>
 								<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id.$url_query ?>"><?php echo $item->title ?></a>
 							</td>
-							<td><span><?php echo $item->link ?></span> <a href="#" class="copy-to-clipboard"><span class="glyphicon glyphicon-copy"></span></a></td>
+							<td><span><?php echo $item->link ?></span> <a href="#" class="copy-to-clipboard"><span class="octicon octicon-clippy"></span></a></td>
 							<td class="td_sort">
-								<input class="form-control input-xs" name="sort" type="text" value="<?php echo $item->sort ?>" data-sort-table="<?php echo $item->table_name() ?>" data-sort-field="sort" data-item-id="<?php echo $item->id ?>">
+								<input class="form-control form-control-sm" name="sort" type="text" value="<?php echo $item->sort ?>" data-sort-table="<?php echo $item->table_name() ?>" data-sort-field="sort" data-item-id="<?php echo $item->id ?>">
 							</td>
 							<td>
-								<a href="/esup/<?php echo $model->options['render']['link'] ?>/delete/<?php echo $item->id.$url_query ?>" class="pull-right red-link">
-									<span class="glyphicon glyphicon-trash"></span>
-								</a>
-								<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id.$url_query ?>" class="pull-right" style="margin-right: 20px">
-									<span class="glyphicon glyphicon-edit"></span>
-								</a>
+								<div class="d-flex justify-content-end">
+									<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id.$url_query ?>" class="mr-3"><span class="octicon octicon-pencil"></span></a>
+									<a href="/esup/<?php echo $model->options['render']['link'] ?>/delete/<?php echo $item->id.$url_query ?>" class="red-link"><span class="octicon octicon-trashcan"></span></a>
+								</div>
 							</td>
 						</tr>
 					<?php endforeach ?>
@@ -46,14 +44,13 @@
 				<button name="action" value="delete" class="btn btn-danger multiple-delete" disabled>Удалить выбранные</button>
 			</form>
 		<?php else: ?>
-			<div style="margin-bottom: 20px">
+			<div class="no-records-found">
 				Нет записей для отображения в этом виде.
 			</div>
 		<?php endif ?>
-		<?php echo Pagination::factory(array(
-			'view' => 'esup_pieces/pagination/floating',
+		<?php echo View::factory('esup_pieces/pagination', array(
 			'total_items' => $total_items,
-			'items_per_page' => $items_per_page
+			'items_per_page' => $items_per_page,			
 		)) ?>
 	</div>
 </div>

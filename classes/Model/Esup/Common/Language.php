@@ -2,12 +2,22 @@
  
 class Model_Esup_Common_Language extends Model_Esup {
 
+	private $_default = array(
+        'key' => 'ru',
+        'title' => 'Русский',
+        'visible_name' => 'Рус'
+    );
+	private $_lang = '';
+	private $_postfix = '';
+
 	protected $_table_name = 'languages';
-	protected $_lang = '';
-	protected $_postfix = '';
 
 	public $options = array(
 		'fields' => array(
+            'active' => array(
+                'label' => 'Активен',
+                'type' => 'checkbox',
+            ),
 			'key' => array(
 				'type' => 'text',
 				'label' => 'Ключ'
@@ -27,14 +37,14 @@ class Model_Esup_Common_Language extends Model_Esup {
         )
 	);
 
-	public function get_instance($lang_key, $lang_key_default = 'ru') {
-		$language = $this->where('key', '=', $lang_key)
+	public function get_instance($key) {
+		$language = $this->where('key', '=', $key)
 			->find();
 		if ($language->loaded()) {
 			$this->_lang = $language->key;
 			$this->_postfix = '_'.$language->key;
 		} else {
-			$this->_lang = $lang_key_default;
+			$this->_lang = $this->_default['key'];
 			$this->_postfix = '';
 		}
 		return $this;
@@ -49,19 +59,20 @@ class Model_Esup_Common_Language extends Model_Esup {
 	}
 
     /* Возвращает список активных языков сайта из базы данных */
-    public function get_active($lang_default) {
-        $result = self::$cache_instance->get(CP.'orm_languages_active');
+    public function get_active() {
+    	$cache_instance = Cache::instance(CACHE_DRIVER);
+        $result = $cache_instance->get(CP.'orm_languages_active');
         if ($result) {
             $data_source = $result;
         }
         if (empty($data_source)) {
-            $data_source = $this->get_active_as_array($lang_default);
-            self::$cache_instance->set(CP.'orm_languages_active', $data_source);
+            $data_source = $this->get_active_as_array();
+            $cache_instance->set(CP.'orm_languages_active', $data_source);
         }
         return $data_source;
     }
 
-	private function get_active_as_array($lang_default) {
+	private function get_active_as_array() {
 		$res = array();
 		$languages = $this->where('active', '=', 1)
 			->find_all();
@@ -71,9 +82,9 @@ class Model_Esup_Common_Language extends Model_Esup {
 				'visible_name' => $item->visible_name
 			);
 		}
-		$res[$lang_default['key']] = array(
-			'title' => $lang_default['title'],
-			'visible_name' => $lang_default['visible_name'],
+		$res[$this->_default['key']] = array(
+			'title' => $this->_default['title'],
+			'visible_name' => $this->_default['visible_name'],
 		);
 		return $res;
 	}
@@ -107,7 +118,8 @@ class Model_Esup_Common_Language extends Model_Esup {
 					}
 				}
 			}
-		    self::$cache_instance->delete(CP.$model->table_name().'_structure');
+			$cache_instance = Cache::instance(CACHE_DRIVER);
+		    $cache_instance->delete(CP.$model->table_name().'_structure');
 		}
 	}
 
@@ -126,7 +138,8 @@ class Model_Esup_Common_Language extends Model_Esup {
 					}
 				}
 			}
-		    self::$cache_instance->delete(CP.$model->table_name().'_structure');
+			$cache_instance = Cache::instance(CACHE_DRIVER);
+		    $cache_instance->delete(CP.$model->table_name().'_structure');
 		}
 	}
 

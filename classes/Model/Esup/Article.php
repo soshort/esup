@@ -4,11 +4,11 @@ class Model_Esup_Article extends Model_Esup {
 
 	protected $_table_name = 'articles';
 	protected $_belongs_to = array(
-	'category' => array(
-		'model' => 'Esup_Article_Category',
-		'foreign_key' => 'category_id',
-	)
-);
+		'category' => array(
+			'model' => 'Esup_Article_Category',
+			'foreign_key' => 'category_id',
+		)
+	);
 	protected $_has_many = array(
 		'files' => array(
 			'model'  => 'Esup_Common_File',
@@ -18,6 +18,10 @@ class Model_Esup_Article extends Model_Esup {
 
 	public $options = array(
 		'fields' => array(
+            'active' => array(
+                'label' => 'Активен',
+                'type' => 'checkbox',
+            ),
 			'title' => array(
 				'label' => 'Заголовок',
 				'type' => 'text',

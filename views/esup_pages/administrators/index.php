@@ -28,12 +28,10 @@
 								<?php echo $item->access_level ?>
 							</td>
 							<td>
-								<a href="/esup/<?php echo $model->options['render']['link'] ?>/delete/<?= $item->id ?>" class="pull-right red-link">
-									<span class="glyphicon glyphicon-trash"></span>
-								</a>
-								<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?= $item->id ?>" class="pull-right" style="margin-right: 20px">
-									<span class="glyphicon glyphicon-edit"></span>
-								</a>
+								<div class="d-flex justify-content-end">
+									<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id.$url_query ?>" class="mr-3"><span class="octicon octicon-pencil"></span></a>
+									<a href="/esup/<?php echo $model->options['render']['link'] ?>/delete/<?php echo $item->id.$url_query ?>" class="red-link"><span class="octicon octicon-trashcan"></span></a>
+								</div>
 							</td>
 						</tr>
 					<?php endforeach ?>
@@ -44,14 +42,13 @@
 				<button name="action" value="delete" class="btn btn-danger multiple-delete" disabled>Удалить выбранные</button>
 			</form>
 		<?php else: ?>
-			<div style="margin-bottom: 20px">
+			<div class="no-records-found">
 				Нет записей для отображения в этом виде.
 			</div>
 		<?php endif ?>
-		<?php echo Pagination::factory(array(
-			'view' => 'esup_pieces/pagination/floating',
+		<?php echo View::factory('esup_pieces/pagination', array(
 			'total_items' => $total_items,
-			'items_per_page' => $items_per_page
+			'items_per_page' => $items_per_page,			
 		)) ?>
 	</div>
 </div>

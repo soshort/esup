@@ -1,23 +1,3 @@
-a.active {
-	color: #2a6496;
-	text-decoration: underline;
-}
-
-a.btn.active {
-	color: #333;
-	text-decoration: none;
-}
-
-a.selected {
-	background-color: #f0ad4e;
-}
-
-.loading {
-	margin-top: 15px;
-	margin-bottom: 0px;
-	display: none;
-}
-
 a.red-link {
 	color: #d9534f;
 }
@@ -26,46 +6,48 @@ a.red-link:hover {
 	color: #d2322d;
 }
 
-a.label_link {
-	text-decoration: none;
+a.dotted {
+    border-bottom: dotted 1px;
+}
+
+a.dotted:hover, a.dotted:active, a.dotted:focus {
+    text-decoration: none;
 }
 
 .authorization-form .panel {
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
 }
+
 .authorization-form #captcha {
     cursor: pointer;
 }
-.authorization-form .glyphicon-refresh {
+
+.authorization-form .octicon-sync {
     cursor: pointer;
-    font-size: 25px;
+    font-size: 2rem;
     vertical-align: middle;
 }
 
-table .input-xs {
-    padding: 0;
-    width: 30px;
-    height: 20px;
+table .form-control-sm {
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 2rem;
     text-align: center;
 }
 
-.th_sort, .td_sort {
-	width: 10%;
+input[readonly], textarea[readonly] {
+	cursor: default !important;
 }
 
-input[readonly], input[readonly] {
-	cursor: text !important;
+.loading {
+    width: 200px;
 }
 
 /* Bootstrap callout */
 .bs-callout {
-	margin: 20px 0;
-	padding: 15px 30px 15px 15px;
-	border-left: 5px solid #eee;
-}
-
-.bs-callout h4 {
-	margin-top: 0;
+	margin-bottom: 1rem;
+	padding: 1rem;
+	border-left: .3rem solid #eee;
 }
 
 .bs-callout p:last-child {
@@ -108,28 +90,21 @@ input[readonly], input[readonly] {
 	color: #3A87AD;
 }
 
-a.dotted {
-	border-bottom: dotted 1px;
-}
-
-a.dotted:hover, a.dotted:active, a.dotted:focus {
-	text-decoration: none;
-}
-
 .recursive_checkbox {
 	float: left;
-	margin: 0 0 10px 10px;
+	margin: 0 0 .5rem .5rem;
 	border: solid 1px #f1e7bc;
-	padding: 10px;
+	padding: .5rem;
 	border-radius: 4px;
 }
 
-#main_form, .main-list {
-	margin-top: 20px;
+#main_form, .main-list, #main_form .tab-content, #main_form .nav-tabs, .settings-sets { /*.no-records-found*/
+	margin-bottom: 1rem;
 }
 
 .main_header {
-	margin-top: 0px;
+    margin-top: .5rem;
+	margin-bottom: 1rem;
 }
 
 .fadeIn {
@@ -161,14 +136,18 @@ a.dotted:hover, a.dotted:active, a.dotted:focus {
 }
 
 .noty_buttons {
-	padding: 0 10px 10px 10px;
+	padding: 0 .5rem .5rem .5rem;
 }
 
 .noty_buttons .btn {
-	margin-right: 10px;
+	margin-right: .5rem;
 }
 
-.filter-list .panel-heading {
+.filter-list {
+    margin-bottom: 1rem;
+}
+
+.filter-list .card-header {
 	cursor: pointer;
 }
 
@@ -179,10 +158,10 @@ a.dotted:hover, a.dotted:active, a.dotted:focus {
 }
 
 .left-filter-list {
-	padding: 15px 15px;
+	padding: 1rem 1rem;
 	border: 1px solid #ddd;
 	border-radius: 4px;
-	margin-bottom: 20px;
+	margin-bottom: 1rem;
 }
 
 .left-filter-list h3 {
@@ -193,7 +172,7 @@ a.dotted:hover, a.dotted:active, a.dotted:focus {
 	border-bottom: 1px solid #ddd;
 	list-style-type: none;
 	padding: 0;
-	margin-bottom: 15px;
+	margin-bottom: 1rem;
 }
 
 .left-filter-list ul ul {
@@ -201,8 +180,8 @@ a.dotted:hover, a.dotted:active, a.dotted:focus {
 }
 
 .left-filter-list li {
-	margin-bottom: 10px;
-	padding-left: 15px;
+	margin-bottom: .5rem;
+	padding-left: 1rem;
 	position: relative;
 }
 
@@ -212,7 +191,7 @@ a.dotted:hover, a.dotted:active, a.dotted:focus {
 }
 
 .left-filter-list li ul {
-	padding: 10px 0 0 0;
+	padding: .5rem 0 0 0;
 }
 
 .nav-tabs li .info {
@@ -223,7 +202,7 @@ a.dotted:hover, a.dotted:active, a.dotted:focus {
 
 /* Файлы */
 .file.edit_cont {
-	padding-top: 20px;
+	padding-top: 1rem;
 }
 
 .file.edit_cont .flex_container {
@@ -236,15 +215,17 @@ a.dotted:hover, a.dotted:active, a.dotted:focus {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap
 }
+
 .file.edit_cont .flex_item {
     -webkit-box-flex: 1;
     -webkit-flex: 1 1;
     -moz-box-flex: 1;
     -ms-flex: 1 1;
     flex: 1 1;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
     padding: 0 15px
 }
+
 .file.edit_cont .main_cont {
     display: -webkit-box;
     display: -webkit-flex;
@@ -257,10 +238,12 @@ a.dotted:hover, a.dotted:active, a.dotted:focus {
     -ms-flex: 0 1 330px;
     flex: 0 1 330px
 }
+
 .file.edit_cont .main_cont .pic_cont img {
     max-width: 100%;
     max-height: 100%
 }
+
 .file.edit_cont .main_cont .icons_cont {
     display: -webkit-box;
     display: -webkit-flex;
@@ -281,41 +264,36 @@ a.dotted:hover, a.dotted:active, a.dotted:focus {
     align-items: center;
     padding-left: 7.5px
 }
+
 .file.edit_cont .main_cont .icons_cont .item_cont {
     margin-bottom: 7.5px
 }
+
 .file.edit_cont .main_cont .icons_cont .item_cont:last-child {
     margin-bottom: 0
 }
+
 .file.edit_cont .main_cont .icons_cont .file-sort .form-control {
     padding: 0;
-    width: 30px;
-    height: 30px;
+    width: 2rem;
+    padding-top: 0;
+    padding-bottom: 0;
     text-align: center
-}
-.file.edit_cont .main_cont .icons_cont .rotate_left .glyphicon {
-    -webkit-transform: scaleX(-1);
-    -moz-transform: scaleX(-1);
-    -ms-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    transform: scaleX(-1);
-    -ms-filter: "FlipH";
-    -webkit-filter: FlipH;
-    filter: FlipH
 }
 
 .file .pic_cont .file_name {
-	margin-bottom: 10px;
+	margin-bottom: .5rem;
 }
 
-.file .pic_cont .glyphicon-open-file {
-	font-size: 50px;
+.file .pic_cont .octicon-file {
+	font-size: 3rem;
 }
 
 .multiple-form {
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
-.pagination-esup {
-    margin-top: 0px;
+.esup-navbar .navbar-text {
+    padding-top: 0;
+    padding-bottom: 0;
 }

@@ -12,6 +12,10 @@ class Model_Esup_Gallery extends Model_Esup {
 
 	public $options = array(
 		'fields' => array(
+            'active' => array(
+                'label' => 'Активен',
+                'type' => 'checkbox'
+            ),
 			'title' => array(
 				'label' => 'Заголовок',
 				'type' => 'text',
@@ -25,7 +29,7 @@ class Model_Esup_Gallery extends Model_Esup {
 				),
 			),
 			'text' => array(
-				'label' => 'Описание галереи',
+				'label' => 'Текст',
 				'type' => 'ckeditor',
 				'translate' => TRUE
 			),

@@ -70,7 +70,7 @@ class Controller_Esup_Common_Crud extends Controller_Esup_Common {
 			if (isset($model->options['render']['form'])) {
 				$this->template->content = View::factory('esup_pieces/default_form');
 			} else {
-				$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/add_form');
+				$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/add');
 			}
 			$this->template->content->set('model', $model);
 		}
@@ -113,7 +113,7 @@ class Controller_Esup_Common_Crud extends Controller_Esup_Common {
 		if (Arr::get($model->options['render'], 'form')) {
 			$this->template->content = View::factory('esup_pieces/default_form');
 		} else {
-			$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/edit_form');
+			$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/edit');
 		}
 		$this->template->content->set('model', $model);
 	}

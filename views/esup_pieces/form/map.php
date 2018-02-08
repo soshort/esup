@@ -1,5 +1,5 @@
-<div class="form-group">
-	<label for="form_<?php echo $key ?>" class="col-sm-2 control-label"><?php echo $field['label'] ?></label>
+<div class="form-group row">
+	<label for="form_<?php echo $key ?>" class="col-sm-2 col-form-label"><?php echo $field['label'] ?></label>
 	<div class="col-sm-10">
 		<div id="map_<?php echo $key ?>" style="width: 100%; height: 300px"></div>
 		<input type="hidden" name="<?php echo $key ?>" id="form_<?php echo $key ?>" value="<?php echo ($model->$key == '') ? '43.295904,76.943776:10' : $model->$key ?>" />

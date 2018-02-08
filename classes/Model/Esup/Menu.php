@@ -23,6 +23,10 @@ class Model_Esup_Menu extends Model_Esup {
     public $options = array(
         /* Поля БД */
         'fields' => array(
+            'active' => array(
+                'label' => 'Активен',
+                'type' => 'checkbox'
+            ),
 			'title' => array(
 				'type' => 'text',
 				'label' => 'Заголовок',

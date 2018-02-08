@@ -21,18 +21,16 @@
 						<tr>
 							<td><input type="checkbox" class="multiple-item" value="<?php echo $item->id ?>"></td>
 							<td><?php echo $item->id ?></td>
-							<td><a target="_blank" href="/static/uploads/files/<?php echo $item->file ?>"><span class="glyphicon glyphicon-new-window"></span></a></td>
+							<td><a target="_blank" href="/static/uploads/files/<?php echo $item->file ?>"><span class="octicon octicon-browser"></span></a></td>
 							<td>
 								<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id ?>"><?php echo $item->original_name ?></a>
 							</td>
 							<td><?php echo date('d-m-Y H:i:s', $item->creation_time) ?></td>
 							<td>
-								<a href="/esup/<?php echo $model->options['render']['link'] ?>/delete/<?php echo $item->id ?>" class="pull-right red-link">
-									<span class="glyphicon glyphicon-trash"></span>
-								</a>
-								<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id ?>" class="pull-right" style="margin-right: 20px">
-									<span class="glyphicon glyphicon-edit"></span>
-								</a>
+								<div class="d-flex justify-content-end">
+									<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id.$url_query ?>" class="mr-3"><span class="octicon octicon-pencil"></span></a>
+									<a href="/esup/<?php echo $model->options['render']['link'] ?>/delete/<?php echo $item->id.$url_query ?>" class="red-link"><span class="octicon octicon-trashcan"></span></a>
+								</div>
 							</td>
 						</tr>
 					<?php endforeach ?>
@@ -43,14 +41,13 @@
 				<button name="action" value="delete" class="btn btn-danger multiple-delete" disabled>Удалить выбранные</button>
 			</form>
 		<?php else: ?>
-			<div style="margin-bottom: 20px">
+			<div class="no-records-found">
 				Нет записей для отображения в этом виде.
 			</div>
 		<?php endif ?>
-		<?php echo Pagination::factory(array(
-			'view' => 'esup_pieces/pagination/floating',
+		<?php echo View::factory('esup_pieces/pagination', array(
 			'total_items' => $total_items,
-			'items_per_page' => $items_per_page,
+			'items_per_page' => $items_per_page,			
 		)) ?>
 	</div>
 </div>

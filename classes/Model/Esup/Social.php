@@ -12,6 +12,10 @@ class Model_Esup_Social extends Model_Esup {
 
 	public $options = array(
 		'fields' => array(
+            'active' => array(
+                'label' => 'Активен',
+                'type' => 'checkbox'
+            ),
 			'title' => array(
 				'label' => 'Заголовок',
 				'type' => 'text',

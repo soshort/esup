@@ -28,31 +28,31 @@
 						<tr>
 							<td><input type="checkbox" class="multiple-item" value="<?php echo $item->id ?>"></td>
 							<td>
-								<?php echo $item->id ?>
-								<?php if (isset($model->options['render']['tree_structure'])): ?>
-									<?php if ($item->{$model->options['render']['tree_structure']['relation']}->count_all() > 0): ?>
-										&nbsp;&nbsp;<a href="/esup/<?php echo $model->options['render']['link'] ?>?<?php echo $model->options['render']['tree_structure']['field'] ?>=<?php echo $item->id ?>" title="Посмотреть дочерние элементы"><span class="glyphicon glyphicon-list"></span></a>
-									<?php else: ?>	
-										&nbsp;&nbsp;<span class="glyphicon glyphicon-list"></span>
+								<div class="d-flex justify-content-start">
+									<span><?php echo $item->id ?></span>
+									<?php if (isset($model->options['render']['tree_structure'])): ?>
+										<?php if ($item->{$model->options['render']['tree_structure']['relation']}->count_all() > 0): ?>
+											<a class="ml-3" href="/esup/<?php echo $model->options['render']['link'] ?>?<?php echo $model->options['render']['tree_structure']['field'] ?>=<?php echo $item->id ?>" title="Посмотреть дочерние элементы"><span class="octicon octicon-list-unordered"></span></a>
+										<?php else: ?>
+											<span class="ml-3"><span class="octicon octicon-list-unordered"></span></span>
+										<?php endif ?>
+										<a class="ml-3" href="/esup/<?php echo $model->options['render']['link'] ?>/add?<?php echo $model->options['render']['tree_structure']['field'] ?>=<?php echo $item->id ?>" title="Добавить новый элемент в этот пункт"><span class="octicon octicon-plus"></span></a>
 									<?php endif ?>
-									&nbsp;&nbsp;<a href="/esup/<?php echo $model->options['render']['link'] ?>/add?<?php echo $model->options['render']['tree_structure']['field'] ?>=<?php echo $item->id ?>" title="Добавить новый элемент в этот пункт"><span class="glyphicon glyphicon-plus"></span></a>
-								<?php endif ?>
+								</div>
 							</td>
 							<td>
 								<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id.$url_query ?>"><?php echo HTML::chars($item->{$model->options['render']['list']['marker_field']}) ?></a>
 							</td>
 							<?php if (isset($model->options['render']['list']['sort'])): ?>
 								<td class="td_sort">
-									<input class="form-control input-xs" name="sort" type="text" value="<?php echo $item->{$model->options['render']['list']['sort']['field']} ?>" data-sort-table="<?php echo $item->table_name() ?>" data-sort-field="<?php echo $model->options['render']['list']['sort']['field'] ?>" data-item-id="<?php echo $item->id ?>">
+									<input class="form-control form-control-sm" name="sort" type="text" value="<?php echo $item->{$model->options['render']['list']['sort']['field']} ?>" data-sort-table="<?php echo $item->table_name() ?>" data-sort-field="<?php echo $model->options['render']['list']['sort']['field'] ?>" data-item-id="<?php echo $item->id ?>">
 								</td>
 							<?php endif ?>
 							<td>
-								<a href="/esup/<?php echo $model->options['render']['link'] ?>/delete/<?php echo $item->id.$url_query ?>" class="pull-right red-link">
-									<span class="glyphicon glyphicon-trash"></span>
-								</a>
-								<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id.$url_query ?>" class="pull-right" style="margin-right: 20px">
-									<span class="glyphicon glyphicon-edit"></span>
-								</a>
+								<div class="d-flex justify-content-end">
+									<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id.$url_query ?>" class="mr-3"><span class="octicon octicon-pencil"></span></a>
+									<a href="/esup/<?php echo $model->options['render']['link'] ?>/delete/<?php echo $item->id.$url_query ?>" class="red-link"><span class="octicon octicon-trashcan"></span></a>
+								</div>
 							</td>
 						</tr>
 					<?php endforeach ?>
@@ -63,14 +63,13 @@
 				<button name="action" value="delete" class="btn btn-danger multiple-delete" disabled>Удалить выбранные</button>
 			</form>
 		<?php else: ?>
-			<div style="margin-bottom: 20px">
+			<div class="no-records-found">
 				Нет записей для отображения в этом виде.
 			</div>
 		<?php endif ?>
-		<?php echo Pagination::factory(array(
-			'view' => 'esup_pieces/pagination/floating',
+		<?php echo View::factory('esup_pieces/pagination', array(
 			'total_items' => $total_items,
-			'items_per_page' => $items_per_page,
+			'items_per_page' => $items_per_page,			
 		)) ?>
 	</div>
 </div>

@@ -2,10 +2,10 @@
 	<?php echo $model->options['render']['title'] ?>
 	<a href="/esup/<?php echo $model->options['render']['link'] ?>/add<?php echo $url_query ?>">Добавить</a>
 </h3>
+<?php echo View::factory('esup_pages/settings/sets_of_settings') ?>
 <?php if (isset($model->options['filters'])): ?>
 	<?php echo View::factory('esup_pieces/filters/filter_list', array('model' => $model)) ?>
 <?php endif ?>
-<?php echo View::factory('esup_pages/settings/sets_of_settings') ?>
 <div class="row main-list">
 	<div class="col-md-12">
 		<?php if (count($list) > 0): ?>
@@ -27,12 +27,10 @@
 							</td>
 							<td><span style="color: #777"><?php echo $item->set ?></span></td>
 							<td>
-								<a href="/esup/settings/delete/<?php echo $item->id.$url_query ?>" class="pull-right red-link">
-									<span class="glyphicon glyphicon-trash"></span>
-								</a>
-								<a href="/esup/settings/edit/<?php echo $item->id.$url_query ?>" class="pull-right" style="margin-right: 20px">
-									<span class="glyphicon glyphicon-edit"></span>
-								</a>
+								<div class="d-flex justify-content-end">
+									<a href="/esup/settings/edit/<?php echo $item->id.$url_query ?>" class="mr-3"><span class="octicon octicon-pencil"></span></a>
+									<a href="/esup/settings/delete/<?php echo $item->id.$url_query ?>" class="red-link"><span class="octicon octicon-trashcan"></span></a>
+								</div>
 							</td>
 						</tr>
 					<?php endforeach ?>
@@ -43,12 +41,11 @@
 				<button name="action" value="delete" class="btn btn-danger multiple-delete" disabled>Удалить выбранные</button>
 			</form>
 		<?php else: ?>
-			<div style="margin-bottom: 20px">
+			<div class="no-records-found">
 				Нет записей для отображения в этом виде.
 			</div>
 		<?php endif ?>
-		<?php echo Pagination::factory(array(
-			'view' => 'esup_pieces/pagination/floating',
+		<?php echo View::factory('esup_pieces/pagination', array(
 			'total_items' => $total_items,
 			'items_per_page' => $items_per_page
 		)) ?>

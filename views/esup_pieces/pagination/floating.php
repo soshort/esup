@@ -4,9 +4,9 @@
 */
 
 // Number of page links in the begin and end of whole range
-$count_out = ( ! empty($config['count_out'])) ? (int) $config['count_out'] : 3;
+$count_out = ( ! empty($config['count_out'])) ? (int) $config['count_out'] : 2;
 // Number of page links on each side of current page
-$count_in = ( ! empty($config['count_in'])) ? (int) $config['count_in'] : 5;
+$count_in = ( ! empty($config['count_in'])) ? (int) $config['count_in'] : 1;
 
 // Beginning group of pages: $n1...$n2
 $n1 = 1;
@@ -55,40 +55,60 @@ for ($i = $n7; $i <= $n8; ++$i)
 }
 
 ?>
-<p class="pagination pagination-esup">
-
-	<?php if ($first_page !== FALSE): ?>
-		<a href="<?php echo HTML::chars($page->url($first_page)) ?>" rel="first"><?php echo 'Первая' ?></a>
-	<?php else: ?>
-		<?php echo 'Первая' ?>
-	<?php endif ?>
-
-	<?php if ($previous_page !== FALSE): ?>
-		<a href="<?php echo HTML::chars($page->url($previous_page)) ?>" rel="prev"><?php echo 'Предыдущая' ?></a>
-	<?php else: ?>
-		<?php echo 'Предыдущая' ?>
-	<?php endif ?>
-
-	<?php foreach ($links as $number => $content): ?>
-
-		<?php if ($number === $current_page): ?>
-			<strong><?php echo $content ?></strong>
+<nav aria-label="Page navigation example">
+	<ul class="pagination justify-content-center">
+		<?php if ($first_page !== FALSE): ?>
+			<!-- <li class="page-item">
+				<a class="page-link" href="<?php echo HTML::chars($page->url($first_page)) ?>" rel="first"><?php echo 'Первая' ?></a>
+			</li> -->
 		<?php else: ?>
-			<a href="<?php echo HTML::chars($page->url($number)) ?>"><?php echo $content ?></a>
+			<!-- <li class="page-item disabled">
+				<span class="page-link"><?php echo 'Первая' ?></span>
+			</li> -->
 		<?php endif ?>
 
-	<?php endforeach ?>
+		<?php if ($previous_page !== FALSE): ?>
+			<li class="page-item d-none d-lg-block">
+				<a class="page-link" href="<?php echo HTML::chars($page->url($previous_page)) ?>" rel="prev"><?php echo 'Предыдущая' ?></a>
+			</li>
+		<?php else: ?>
+			<li class="page-item disabled d-none d-lg-block">
+				<span class="page-link"><?php echo 'Предыдущая' ?></span>
+			</li>
+		<?php endif ?>
 
-	<?php if ($next_page !== FALSE): ?>
-		<a href="<?php echo HTML::chars($page->url($next_page)) ?>" rel="next"><?php echo 'Следующая' ?></a>
-	<?php else: ?>
-		<?php echo 'Следующая' ?>
-	<?php endif ?>
+		<?php foreach ($links as $number => $content): ?>
 
-	<?php if ($last_page !== FALSE): ?>
-		<a href="<?php echo HTML::chars($page->url($last_page)) ?>" rel="last"><?php echo 'Последняя' ?></a>
-	<?php else: ?>
-		<?php echo 'Последняя' ?>
-	<?php endif ?>
+			<?php if ($number === $current_page): ?>
+				<li class="page-item active">
+					<span class="page-link"><?php echo $content ?><span class="sr-only">(current)</span></span>
+				</li>
+			<?php else: ?>
+				<li class="page-item">
+					<a class="page-link" href="<?php echo HTML::chars($page->url($number)) ?>"><?php echo $content ?></a>
+				</li>
+			<?php endif ?>
 
-</p><!-- .pagination -->
+		<?php endforeach ?>
+
+		<?php if ($next_page !== FALSE): ?>
+			<li class="page-item d-none d-lg-block">
+				<a class="page-link" href="<?php echo HTML::chars($page->url($next_page)) ?>" rel="next"><?php echo 'Следующая' ?></a>
+			</li>
+		<?php else: ?>
+			<li class="page-item disabled d-none d-lg-block">
+				<span class="page-link"><?php echo 'Следующая' ?></span>
+			</li>
+		<?php endif ?>
+
+		<?php if ($last_page !== FALSE): ?>
+			<!-- <li class="page-item">
+				<a class="page-link" href="<?php echo HTML::chars($page->url($last_page)) ?>" rel="last"><?php echo 'Последняя' ?></a>
+			</li> -->
+		<?php else: ?>
+			<!-- <li class="page-item disabled">
+				<span class="page-link"><?php echo 'Последняя' ?></span>
+			</li> -->
+		<?php endif ?>
+	</ul>
+</nav><!-- .pagination -->

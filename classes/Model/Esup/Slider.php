@@ -3,7 +3,14 @@
 class Model_Esup_Slider extends Model_Esup {
 
 	protected $_table_name = 'slider';
+	protected $_belongs_to = array(
+		'page' => array(
+			'model' => 'Esup_Page',
+			'foreign_key' => 'page_id',
+		)
+	);
 	protected $_has_many = array(
+
 		'files' => array(
 			'model'  => 'Esup_Common_File',
 			'foreign_key' => 'item_id'
@@ -12,6 +19,10 @@ class Model_Esup_Slider extends Model_Esup {
 
 	public $options = array(
 		'fields' => array(
+            'active' => array(
+                'label' => 'Активен',
+                'type' => 'checkbox'
+            ),
 			'title' => array(
 				'label' => 'Заголовок',
 				'type' => 'text',
@@ -43,13 +54,14 @@ class Model_Esup_Slider extends Model_Esup {
 		'files' => array(
 			'slider_image' => array(
 				'label' => 'Изображение',
-				/*'thumbnails' => array(
-					'1366x600' => array(
-						'w' => 1366,
-						'h' => 600,
-						'crop' => array('x' => NULL, 'y' => NULL)
+				'thumbnails' => array(
+					'1500x450' => array(
+						'w' => 1500,
+						'h' => 450,
+						'with_bg' => TRUE
+						/*'crop' => array('x' => NULL, 'y' => NULL)*/
 					),
-				),*/
+				),
 				/*'esup_fullsize' => '1366x600',
 				'esup_thumbnail' => '1366x600',
 				'remove_original' => TRUE*/

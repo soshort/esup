@@ -34,7 +34,7 @@ class Controller_Esup_Common_Mailer extends Controller_Esup_Common_Crud {
 	public function action_send_all() {
 		try {
 			$result = ORM::factory('Esup_Common_Mailer')
-				->send_all();
+				->send();
 			$this->session->set('flash', array(
 				'status' => 'ok',
 				'message' => 'Отправлено писем: '.$result['sended'].' из '.$result['total'].'.'

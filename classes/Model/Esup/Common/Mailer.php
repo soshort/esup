@@ -2,9 +2,13 @@
  
 class Model_Esup_Common_Mailer extends Model_Esup {
 
-	protected $_table_name = 'mailer_queue';
+    private $config;
+    private $config_options;
+    private $email_stack = array();
 
-	public $options = array(
+    protected $_table_name = 'mailer_queue';
+
+    public $options = array(
         'filters' => array(
             'search_query' => array(
                 'type' => 'text',
@@ -18,81 +22,91 @@ class Model_Esup_Common_Mailer extends Model_Esup {
             'title' => 'Письма в очереди',
             'link' => 'mailer'
         )
-	);
+    );
 
-    /* Выполняет очередь */
-    public function send_all($limit = NULL) {
-        $config = Kohana::$config->load('email');
-        $options = $config->get('options');
-        $from = $options['username'];
-        Email::connect($config);
-        $rows = DB::select()
-            ->from($this->_table_name)
-            ->where('status', '!=', 1)
-            ->order_by('id', 'ASC')
-            ->limit($limit)
-            ->as_object()
-            ->execute();
-        $total = count($rows);
+    public function __construct($id = NULL) {
+        parent::__construct($id);
+        $this->config = Kohana::$config->load('email');
+        $this->config_options = $this->config->get('options');
+    }
+
+    /* Отправить все письма со статусом "не отправлено" */
+    public function send($limit = NULL) {
+        Email::connect($this->config);
+        if ($this->loaded()) {
+            $this->email_stack[] = $this;
+        }
+        if (empty($this->email_stack)) {
+            $items = $this->where('status', '!=', 1)
+                ->order_by('id', 'ASC')
+                ->limit($limit)
+                ->find_all();
+        } else {
+            $items = $this->email_stack;
+        }
+        $total = count($items);
         $sended = 0;
-        foreach ($rows as $key => $item) {
+        foreach ($items as $key => $item) {
             try {
                 if ($item->_to[0] == '{' || $item->_to[0] == '[') {
                     $to = json_decode($item->_to, TRUE);
                 } else {
                     $to = $item->_to;
                 }
-                Email::send($to, $from, $item->subject, $item->message, $html = TRUE);
-                DB::update($this->_table_name)
-                    ->set(array('status' => 1, 'mailer_response' => 'ok', '_from' => $from))
-                    ->where('id', '=', $item->id)
-                    ->execute();
+                Email::send($to, $this->config_options['username'], $item->subject, $item->message, $html = TRUE);
+                $item->status = 1;
+                $item->_from = $this->config_options['username'];
+                $item->mailer_response = 'ok';
+                $item->save();
                 $sended++;
             } catch (Exception $e) {
-                DB::update($this->_table_name)
-                    ->set(array('status' => 2, 'mailer_response' => $e->getMessage(), '_from' => $from))
-                    ->where('id', '=', $item->id)
-                    ->execute();
+                $item->status = 2;
+                $item->_from = $this->config_options['username'];
+                $item->mailer_response = $e->getMessage();
+                $item->save();
             }
         }
         return array('total' => $total, 'sended' => $sended);
     }
 
-    public function send() {
-        $config = Kohana::$config->load('email');
-        $options = $config->get('options');
-        $from = $options['username'];
-        Email::connect($config);
+    private function _send($item) {
         try {
-            if ($this->_to[0] == '{' || $this->_to[0] == '[') {
-                $to = json_decode($this->_to, TRUE);
+            if ($item->_to[0] == '{' || $item->_to[0] == '[') {
+                $to = json_decode($item->_to, TRUE);
             } else {
-                $to = $this->_to;
+                $to = $item->_to;
             }
-            Email::send($to, $from, $this->subject, $this->message, $html = TRUE);
-            $this->status = 1;
-            $this->mailer_response = 'ok';
-            $this->_from = $from;
-            $this->save();
+            Email::send($to, $this->config_options['username'], $item->subject, $item->message, $html = TRUE);
+            $item->status = 1;
+            $item->mailer_response = 'ok';
+            $item->_from = $this->config_options['username'];
+            $item->save();
+            return TRUE;
         } catch (Exception $e) {
-            $this->status = 2;
-            $this->mailer_response = $e->getMessage();
-            $this->_from = $from;
-            $this->save();
+            $item->status = 2;
+            $item->mailer_response = $e->getMessage();
+            $item->_from = $this->config_options['username'];
+            $item->save();
+            return FALSE;
         }
-        return array('total' => 1, 'sended' => 1);
     }
 
-    public function save_email($from, $to, $subject, $message) {
-        if (is_array($to)) {
-            $to = json_encode($to);
+    public function add_email($options) {
+        if (isset($options['to'])) {
+            if (is_array($options['to'])) {
+                $options['to'] = json_encode($options['to']);
+            }
+        } else {
+            $options['to'] = $this->config_options['inbox'];
         }
-        $this->_from = $from;
-        $this->_to = $to;
-        $this->subject = $subject;
-        $this->message = $message;
-        $this->status = 0;
-        $this->save();
+        $email = ORM::factory('Esup_Common_Mailer');
+        $email->_from = $this->config_options['username'];
+        $email->_to = $options['to'];
+        $email->subject = $options['subject'];
+        $email->message = $options['message'];
+        $email->status = 0;
+        $email->save();
+        $this->email_stack[] = $email;
         return $this;
     }
 

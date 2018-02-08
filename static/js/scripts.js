@@ -3,9 +3,9 @@ $(function(){
 	$(document).on('keyup', 'input[name="sort"]', function(){
 		var t = $(this),
 			value = (t.val() == undefined || t.val() == '') ? 0 : t.val();
-		$('.loading').show();
+		$('.loading').addClass('d-lg-block');
 		$.post('/esup/sorting', { table: t.attr('data-sort-table'), field: t.attr('data-sort-field'), id: t.attr('data-item-id'), value: value }, function(data){
-			$('.loading').hide();
+			$('.loading').removeClass('d-lg-block');
 			if (data.status == 'error') {
 				notification(data.status, data.message);
 			}
@@ -16,9 +16,9 @@ $(function(){
 	$('.file').on('click', '.file-delete', function(){
 		var t = $(this);
 		if (confirm('Удалить эту запись? (Space - да; Esc - нет)') == false) return false;
-		$('.loading').show();
+		$('.loading').addClass('d-lg-block');
 		$.post(t.attr('href'), function(data){
-			$('.loading').hide();
+			$('.loading').removeClass('d-lg-block');
 			if (data.status == 'ok') {
 				t.parents('.flex_item').remove();
 			}
@@ -32,9 +32,9 @@ $(function(){
 	/* Отметить файл как основной */
 	$('.file').on('change', 'input[name^="file_main_"]', function(){
 		var t = $(this);
-		$('.loading').show();
+		$('.loading').addClass('d-lg-block');
 		$.post('/esup/files/set_main', { id: t.attr('data-file-id'), item_id: t.attr('data-item-id'), table: t.attr('data-item-table') }, function(data){
-			$('.loading').hide();
+			$('.loading').removeClass('d-lg-block');
 			if (data.status == 'error') {
 				notification(data.status, data.message);
 			}
@@ -44,9 +44,9 @@ $(function(){
 	/* Повернуть файл */
 	$('.file').on('click', '.rotate', function(){
 		var t = $(this);
-		$('.loading').show();
+		$('.loading').addClass('d-lg-block');
 		$.post(t.attr('href'), { degrees: t.attr('data-degrees') }, function(data){
-			$('.loading').hide();
+			$('.loading').removeClass('d-lg-block');
 			t.parents('.flex_item').find('.img-rounded').attr('src', t.parents('.flex_item').find('.img-rounded').attr('src') + '?' + new Date().getTime())
 			if (data.status == 'error') {
 				notification(data.status, data.message);
@@ -65,7 +65,7 @@ $(function(){
 
 	/* Подтверждение удаления */
 	$('.main-list').on('click', 'table a.red-link', function(){
-		if ($(this).children('span').is('.glyphicon-trash')) {
+		if ($(this).children('span').is('.octicon-trashcan')) {
 			return confirm('Удалить эту запись? (Space - да; Esc - нет)');
 		};
 	});
@@ -101,6 +101,9 @@ $(function(){
 		})
 		t.find('input[name="items"]').val(ids);
 	});
+
+	/* Tooltip */
+	$('[data-toggle="tooltip"]').tooltip();
 });
 
 function notification(status, message) {
