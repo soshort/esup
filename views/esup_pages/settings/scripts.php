@@ -11,7 +11,7 @@
 <?php echo View::factory('esup_pages/settings/sets_of_settings') ?>
 <form role="form" action="/esup/settings/scripts" enctype="multipart/form-data" method="post" id="main_form">
 	<ul class="nav nav-tabs">
-		<li class="nav-item active"><a class="nav-link active" href="#main" data-toggle="tab">Основные поля</a></li>
+		<li class="nav-item active"><a class="nav-link active" href="#main" data-toggle="tab">Описание</a></li>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="main">

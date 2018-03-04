@@ -4,7 +4,7 @@
 </h3>
 <form role="form" action="/esup/settings/add<?php echo $url_query ?>" enctype="multipart/form-data" method="post" id="main_form">
 	<ul class="nav nav-tabs">
-		<li class="nav-item"><a class="nav-link active" href="#main" data-toggle="tab">Основные поля</a></li>
+		<li class="nav-item"><a class="nav-link active" href="#main" data-toggle="tab">Описание</a></li>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="main">
@@ -42,7 +42,7 @@
 				<input type="submit" class="btn btn-primary" name="edit" value="Сохранить">
 			<?php endif ?>
 			<a href="/esup/<?php echo $model->options['render']['link'].$url_query ?>">
-				<input type="button" class="btn btn-secondary" value="Отмена">
+				<input type="button" class="btn" value="Отмена">
 			</a>
 		</div>
 	</div>

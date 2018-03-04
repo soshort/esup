@@ -27,15 +27,9 @@ return array(
                 ),
                 array(
                     'type' => 'menu',
-                    'text' => 'Статичные страницы',
+                    'text' => 'Страницы',
                     'link' => 'pages',
                     'access_level' => 0
-                ),
-                array(
-                    'type' => 'menu',
-                    'text' => 'Категории статей',
-                    'link' => 'article_categories',
-                    'access_level' => 10
                 ),
                 array(
                     'type' => 'menu',
@@ -45,14 +39,20 @@ return array(
                 ),
                 array(
                     'type' => 'menu',
-                    'text' => 'Галереи',
-                    'link' => 'galleries',
+                    'text' => 'Категории статей',
+                    'link' => 'article_categories',
                     'access_level' => 10
                 ),
                 array(
                     'text' => 'Слайдер',
                     'link' => 'slider',
                     'access_level' => 0
+                ),
+                array(
+                    'type' => 'menu',
+                    'text' => 'Галереи',
+                    'link' => 'galleries',
+                    'access_level' => 10
                 ),
                 array(
                     'type' => 'menu',

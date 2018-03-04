@@ -32,7 +32,7 @@ class Model_Esup_Common_Settings extends Model_Esup {
                     'title' => 'Поиск'
                 )
             ),
-			'set' => array(
+			/*'set' => array(
 				'type' => 'select',
 				'model' => 'Esup_Common_Settings',
 				'fields' => 'set',
@@ -41,7 +41,19 @@ class Model_Esup_Common_Settings extends Model_Esup {
 					'model_value_field' => 'set',
 					'title' => 'Набор'
 				)
-			),
+			),*/
+			'set' => array(
+				'type' => 'select2',
+				'model' => 'Esup_Common_Settings',
+				'fields' => 'set',
+				'render' => array(
+					'title' => 'Набор',
+					'title_field' => 'set',
+					'value_field' => 'set',
+					'order_field' => 'title',
+					'order_direction' => 'ASC'
+				)
+			)
         ),
 		'render' => array(
 			'title' => 'Настройки',

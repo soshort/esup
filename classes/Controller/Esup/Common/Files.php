@@ -12,7 +12,12 @@ class Controller_Esup_Common_Files extends Controller_Esup_Common_Crud {
 		try {
 			$model = ORM::factory($this->model_name, $this->request->param('id'));
 			if ($model->loaded()) {
-				$model->delete_file();
+				if ($model->item_id == NULL) {
+					$model->set_path(DOCROOT.'/static/uploads/uploaded_files/')
+						->delete_file();
+				} else {
+					$model->delete_file();
+				}
 				$result_array = array(
 					'status' => 'ok',
 					'message' => 'Файл удален.'

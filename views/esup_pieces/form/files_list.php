@@ -10,14 +10,14 @@
 					<?php if ($item->is_image()): ?>
 			            <div class="pic_cont">
 			            	<div class="file_name"><?php echo Text::limit_chars($item->original_name, 20) ?></div>
-			                <a href="<?php echo $fullsize.$item->file ?>" target="_blank">
+			                <a href="<?php echo $fullsize.$item->file ?>" data-fancybox="<?php echo $group_key ?>">
 			                	<img src="<?php echo $thumbnail.$item->file ?>" class="rounded">
 			                </a>
 			            </div>
 			        <?php else: ?>
 			            <div class="pic_cont">
 			            	<div class="file_name"><?php echo Text::limit_chars($item->original_name, 20) ?></div>
-			                <a href="<?php echo $fullsize.$item->file ?>" target="_blank">
+			                <a href="<?php echo $fullsize.$item->file ?>">
 			                	<span class="octicon octicon-file"></span>
 			                </a>
 			            </div>
@@ -30,7 +30,7 @@
 		                    <input type="text" class="form-control form-control-sm" placeholder="Сортировка" value="<?php echo $item->sort ?>" name="sort" data-sort-table="files" data-sort-field="sort" data-item-id="<?php echo $item->id ?>">
 		                </div>
 		                <div class="item_cont">
-		                    <a target="_blank" href="/esup/files/edit/<?php echo $item->id ?>"><span class="octicon octicon-pencil"></span></a>
+		                    <a href="/esup/files/edit/<?php echo $item->id ?>"><span class="octicon octicon-pencil"></span></a>
 		                </div>
 		                <div class="item_cont">
 		                    <a href="/esup/files/delete/<?php echo $item->id ?>" class="file-delete red-link"><span class="octicon octicon-trashcan"></span></a>

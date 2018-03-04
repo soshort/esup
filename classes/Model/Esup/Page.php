@@ -73,7 +73,7 @@ class Model_Esup_Page extends Model_Esup {
 				)
 			),*/
 			'form' => TRUE,
-			'title' => 'Статичные страницы',
+			'title' => 'Страницы',
 			'link' => 'pages'
 		)
 	);

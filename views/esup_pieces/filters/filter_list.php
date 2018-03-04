@@ -1,13 +1,9 @@
 <div class="card bg-light filter-list">
 	<div class="card-header border-0 rounded">Фильтры</div>
 	<div class="card-body" <?php echo (Arr::get($_GET, 'filters') == 'show') ? '' : 'style="display: none"' ?>>
-		<form action="/esup/<?php echo $model->options['render']['link'] ?>" method="get">
+		<form action="/esup/<?php echo $model->options['render']['link'].$url_query ?>" method="get">
 			<?php foreach ($model->options['filters'] as $filter_key => $filter): ?>
-				<?php if ($filter['type'] == 'select'): ?>
-					<?php echo View::factory('esup_pieces/filters/select', array('filter' => $filter, 'filter_key' => $filter_key)) ?>
-				<?php elseif ($filter['type'] == 'text'): ?>
-					<?php echo View::factory('esup_pieces/filters/text', array('filter' => $filter, 'filter_key' => $filter_key)) ?>
-				<?php endif ?>
+				<?php echo View::factory('esup_pieces/filters/'.$filter['type'], array('filter' => $filter, 'filter_key' => $filter_key)) ?>
 			<?php endforeach ?>
 			<?php if (isset($bind_params)): ?>
 				<?php foreach ($bind_params as $p_key => $param): ?>
@@ -18,7 +14,9 @@
 			<?php endif ?>
 			<input type="hidden" name="filters" value="show">
 			<input type="submit" class="btn btn-primary" value="Применить">
-			<a href="/esup/<?php echo $model->options['render']['link'] ?>"><button class="btn btn-secondary" type="button">Сбросить</button></a>
+			<a href="/esup/<?php echo $model->options['render']['link'] ?>">
+				<button class="btn" type="button">Сбросить</button>
+			</a>
 		</form>
 	</div>
 </div>
@@ -27,19 +25,6 @@
 		$(document).on('click', '.filter-list .card-header', function(){
 			var t = $(this);
 			t.next().slideToggle(200);
-		});
-
-		$(document).on('click', '.filter-select .filter-select-item', function(){
-			var t = $(this),
-				filterSelectTitle = t.parents('.filter-select').find('.filter-select-title');
-			if (t.attr('data-value') == '') {
-				filterSelectTitle.text(filterSelectTitle.attr('data-default-title'));
-			} else {
-				filterSelectTitle.text(t.text());
-			}
-			t.parents('.filter-select').find('input[type="hidden"]').val(t.attr('data-value'));
-			t.parents('.filter-select').find('.dropdown-toggle').dropdown('toggle');
-			return false;
 		});
 	});
 </script>

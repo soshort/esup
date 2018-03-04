@@ -6,6 +6,11 @@ class Controller_Esup_Common_Fmanager extends Controller_Esup_Common {
 		$this->template->content = View::factory('esup_pages/fmanager/index');
 	}
 
+	public function action_windowed() {
+		$this->template = View::factory('esup_layout/blank');
+		$this->template->content = View::factory('esup_pages/fmanager/blank');
+	}
+
 	public function action_init() {
 		error_reporting(0);
 		function access($attr, $path, $data, $volume) {

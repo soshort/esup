@@ -4,11 +4,11 @@
 </h3>
 <?php echo View::factory('esup_pages/settings/sets_of_settings') ?>
 <div>
-	<div style="margin-bottom: 1rem">
+	<div class="mb-3">
 		<a href="/esup/settings/sitemap?action=generate" class="btn btn-primary">Сгенерировать</a>
 		<a href="/esup/settings/sitemap?action=ping" class="btn btn-primary">Пинг</a>
 	</div>
-	<div style="margin-bottom: 1rem">
+	<div class="mb-3">
 		<a class="dotted trigger_xml" href="#">Показать содержимое sitemap.xml</a>
 	</div>
 	<pre style="display: none">

@@ -23,7 +23,8 @@ class Model_Esup_Article_Category extends Model_Esup {
             ),
             'title' => array(
                 'label' => 'Заголовок',
-                'type' => 'text'
+                'type' => 'text',
+                'translate' => TRUE
             ),
             'link' => array(
                 'type' => 'text',

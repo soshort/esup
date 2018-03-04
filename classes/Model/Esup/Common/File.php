@@ -5,6 +5,7 @@ class Model_Esup_Common_File extends Model_Esup {
     protected $_table_name = 'files';
 
     public $file_path;
+    public $file_path_unsigned;
     public $file_name;
     public $file_extension;
     public $full_name;
@@ -36,11 +37,15 @@ class Model_Esup_Common_File extends Model_Esup {
 
     public function __construct($id = NULL) {
         parent::__construct($id);
-        /* Установка директории для загрузки файлов */
         $this->file_path = Kohana::$config->load('esup.files_dir');
         if (is_dir($this->file_path) == FALSE) {
             mkdir($this->file_path, 0755, TRUE);
         }
+    }
+
+    public function set_path($path) {
+        $this->file_path = $path;
+        return $this;
     }
 
     /* Сохранение файла */
@@ -140,6 +145,7 @@ class Model_Esup_Common_File extends Model_Esup {
             array_map($_unlink, $mask);
             $this->delete();
         }
+        return $this;
     }
 
     /* Возвращает TRUE если файл является изображением */
@@ -178,6 +184,12 @@ class Model_Esup_Common_File extends Model_Esup {
             }
         }
         return $file_array;
+    }
+
+    /* Возвращает url адрес изображения */
+    public function get_file_url($prefix = NULL, $dummy = TRUE) {
+        $file_name = (empty($prefix)) ? $this->file : $prefix.'_'.$this->file;
+        return ($this->loaded()) ? '/static/uploads/files/'.$file_name : (($dummy) ? '/static/images/no_photo.png' : '');
     }
 
 }

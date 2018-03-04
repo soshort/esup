@@ -34,14 +34,15 @@ class Model_Esup_Slider extends Model_Esup {
 				'translate' => TRUE
 			),
 			'page_id' => array(
-				'type' => 'belongs_to',
-				'label' => 'Привязать к странице',
-				'relation' => array(
-					'model' => 'Esup_Page',
-					'id_field' => 'id',
-					'title_field' => 'title'
-				),
-				'show_default_value' => TRUE
+				'type' => 'select2',
+				'model' => 'Esup_Page',
+				'render' => array(
+					'title' => 'Привязать к странице',
+					'title_field' => 'title',
+					'value_field' => 'id',
+					'order_field' => 'sort',
+					'order_direction' => 'ASC'
+				)
 			),
 			'link' => array(
 				'type' => 'text',

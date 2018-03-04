@@ -36,15 +36,15 @@ class Model_Esup_Article extends Model_Esup {
 				)
 			),
 			'category_id' => array(
-				'type' => 'belongs_to',
-				'label' => 'Категория',
-				'relation' => array(
-					'model' => 'Esup_Article_Category',
-					'id_field' => 'id',
-					'title_field' => 'title'
-				),
-				'default' => 'category_id',
-				'show_default_value' => TRUE
+				'type' => 'select2',
+				'model' => 'Esup_Article_Category',
+				'render' => array(
+					'title' => 'Категория',
+					'title_field' => 'title',
+					'value_field' => 'id',
+					'order_field' => 'sort',
+					'order_direction' => 'ASC'
+				)
 			),
 			'text_short' => array(
 				'label' => 'Коротко',
@@ -97,21 +97,23 @@ class Model_Esup_Article extends Model_Esup {
 			),
 		),
 		'filters' => array(
-			'category_id' => array(
-				'type' => 'select',
-				'model' => 'Esup_Article_Category',
-				'fields' => 'category_id',
-				'render' => array(
-					'model_title_field' => 'title',
-					'model_value_field' => 'id',
-					'title' => 'Категория'
-				)
-			),
 			'search_query' => array(
 				'type' => 'text',
 				'fields' => array('title', 'link'), // Может быть массивом, например: array('title', 'text')
 				'render' => array(
 					'title' => 'Поиск'
+				)
+			),
+			'category_id' => array(
+				'type' => 'select2',
+				'model' => 'Esup_Article_Category',
+				'fields' => 'category_id',
+				'render' => array(
+					'title' => 'Категория',
+					'title_field' => 'title',
+					'value_field' => 'id',
+					'order_field' => 'sort',
+					'order_direction' => 'ASC'
 				)
 			)
 		),

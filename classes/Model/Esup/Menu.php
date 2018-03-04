@@ -33,25 +33,29 @@ class Model_Esup_Menu extends Model_Esup {
 				'translate' => TRUE,
 			),
 			'parent_id' => array(
-				'type' => 'belongs_to',
-				'label' => 'Родительский пункт',
-				'relation' => array(
-					'model' => 'Esup_Menu',
-					'id_field' => 'id',
-					'title_field' => 'title'
+				'type' => 'select2',
+				'model' => 'Esup_Menu',
+				'render' => array(
+					'title' => 'Родительский пункт',
+					'title_field' => 'title',
+					'value_field' => 'id',
+					'order_field' => 'sort',
+					'order_direction' => 'ASC'
 				),
-				'default' => 'parent_id',
-				'show_default_value' => TRUE
+				'nested' => array(
+					'field' => 'parent_id'
+				)
 			),
 			'page_id' => array(
-				'type' => 'belongs_to',
-				'label' => 'Привязать к странице',
-				'relation' => array(
-					'model' => 'Esup_Page',
-					'id_field' => 'id',
-					'title_field' => 'title'
-				),
-				'show_default_value' => TRUE
+				'type' => 'select2',
+				'model' => 'Esup_Page',
+				'render' => array(
+					'title' => 'Привязать к странице',
+					'title_field' => 'title',
+					'value_field' => 'id',
+					'order_field' => 'sort',
+					'order_direction' => 'ASC'
+				)
 			),
 			'link' => array(
 				'type' => 'text',
@@ -68,6 +72,21 @@ class Model_Esup_Menu extends Model_Esup {
 				'fields' => array('title', 'link'), // Может быть массивом, например: array('title', 'text')
 				'render' => array(
 					'title' => 'Поиск'
+				)
+			),
+			'parent_id' => array(
+				'type' => 'select2',
+				'model' => 'Esup_Menu',
+				'fields' => 'parent_id',
+				'render' => array(
+					'title' => 'Родительский пункт',
+					'title_field' => 'title',
+					'value_field' => 'id',
+					'order_field' => 'sort',
+					'order_direction' => 'ASC'
+				),
+				'nested' => array(
+					'field' => 'parent_id'
 				)
 			)
 		),

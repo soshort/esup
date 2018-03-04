@@ -2,7 +2,7 @@
 	$parent_field = $model->options['render']['tree_structure']['field'];
 	$breadcrumbs = $model->breadcrumbs(Arr::get($_GET, $parent_field))
 ?>
-<nav aria-label="breadcrumb" style="margin-top: 1rem">
+<nav aria-label="breadcrumb">
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a href="/esup/<?php echo $model->options['render']['link'] ?>">Корневой каталог</a></li>
 		<?php foreach ($breadcrumbs as $key => $item): ?>

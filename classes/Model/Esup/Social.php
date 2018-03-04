@@ -8,6 +8,12 @@ class Model_Esup_Social extends Model_Esup {
 			'model'  => 'Esup_Common_File',
 			'foreign_key' => 'item_id'
 		),
+		'pages'  => array(
+			'model'  => 'Esup_Page',
+			'through' => 'pivot_pages_social',
+			'foreign_key' => 'social_id',
+			'far_key' => 'page_id',
+		)
 	);
 
 	public $options = array(

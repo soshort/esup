@@ -1,9 +1,13 @@
+html, body {
+    height: 100%;
+}
+
 a.red-link {
-	color: #d9534f;
+    color: #d9534f;
 }
 
 a.red-link:hover {
-	color: #d2322d;
+    color: #d2322d;
 }
 
 a.dotted {
@@ -11,6 +15,14 @@ a.dotted {
 }
 
 a.dotted:hover, a.dotted:active, a.dotted:focus {
+    text-decoration: none;
+}
+
+a.selected, .selected {
+    background-color: #28a745;
+    border-radius: 3px;
+    color: #fff;
+    padding: 0 5px;
     text-decoration: none;
 }
 
@@ -41,61 +53,6 @@ input[readonly], textarea[readonly] {
 
 .loading {
     width: 200px;
-}
-
-/* Bootstrap callout */
-.bs-callout {
-	margin-bottom: 1rem;
-	padding: 1rem;
-	border-left: .3rem solid #eee;
-}
-
-.bs-callout p:last-child {
-	margin-bottom: 0;
-}
-
-.bs-callout code,
-.bs-callout .highlight {
-	background-color: #fff;
-}
-
-.bs-callout label {
-	font-weight: normal;
-}
-
-.bs-callout-danger {
-	background-color: #fcf2f2;
-	border-color: #dFb5b4;
-}
-
-.bs-callout-warning {
-	background-color: #fefbed;
-	border-color: #f1e7bc;
-}
-
-.bs-callout-info {
-	background-color: #f0f7fd;
-	border-color: #d0e3f0;
-}
-
-.bs-callout-danger h4 {
-	color: #B94A48;
-}
-
-.bs-callout-warning h4 {
-	color: #C09853;
-}
-
-.bs-callout-info h4 {
-	color: #3A87AD;
-}
-
-.recursive_checkbox {
-	float: left;
-	margin: 0 0 .5rem .5rem;
-	border: solid 1px #f1e7bc;
-	padding: .5rem;
-	border-radius: 4px;
 }
 
 #main_form, .main-list, #main_form .tab-content, #main_form .nav-tabs, .settings-sets { /*.no-records-found*/
@@ -152,9 +109,14 @@ input[readonly], textarea[readonly] {
 }
 
 .filter-list .filter-text {
-	display: inline-block;
-	vertical-align: middle;
-	width: auto;
+    /*display: inline-block;*/
+    vertical-align: middle;
+    margin-bottom: 1rem;
+    /*width: auto;*/
+}
+
+.filter-list .select2-container {
+    margin-bottom: 1rem;
 }
 
 .left-filter-list {
@@ -200,7 +162,6 @@ input[readonly], textarea[readonly] {
 	padding-bottom: 2px;
 }
 
-/* Файлы */
 .file.edit_cont {
 	padding-top: 1rem;
 }
@@ -296,4 +257,33 @@ input[readonly], textarea[readonly] {
 .esup-navbar .navbar-text {
     padding-top: 0;
     padding-bottom: 0;
+}
+
+/* Select2 styles */
+.select2-container--bootstrap .select2-selection--single {
+    height: 38px;
+    line-height: 1.5;
+    padding: .375rem 30px .375rem .75rem;
+    font-size: 1rem;
+}
+
+.select2-search--dropdown .select2-search__field {
+    padding: .375rem .75rem;
+}
+
+.select2-container--bootstrap .select2-results__option--highlighted[aria-selected] {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.select2-container--bootstrap .select2-selection--multiple {
+    min-height: 38px;
+}
+
+.select2-container--bootstrap .select2-selection--multiple .select2-selection__choice {
+    margin: 7px 0 0 7px;
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+    font-size: 1rem;
 }

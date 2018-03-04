@@ -17,12 +17,12 @@
 </h3>
 <form role="form" action="<?php echo $action_link ?>" enctype="multipart/form-data" method="post" id="main_form">
 	<ul class="nav nav-tabs">
-		<li class="nav-item"><a href="#main" class="nav-link active" data-toggle="tab">Основные поля</a></li>
+		<li class="nav-item"><a href="#main" class="nav-link active" data-toggle="tab">Описание</a></li>
 		<?php if (isset($model->options['files'])): ?>
 			<li class="nav-item"><a class="nav-link" href="#files" data-toggle="tab">Файлы</a></li>
 		<?php endif ?>
 		<?php if (isset($model->options['many_to_many'])): ?>
-			<li class="nav-item"><a class="nav-link" href="#many_to_many" data-toggle="tab">Много ко многим</a></li>
+			<li class="nav-item"><a class="nav-link" href="#many_to_many" data-toggle="tab">Списки</a></li>
 		<?php endif ?>
 	</ul>
 	<div class="tab-content">
@@ -41,7 +41,7 @@
 		<?php if (isset($model->options['many_to_many'])): ?>
 			<div class="tab-pane" id="many_to_many">
 				<?php foreach ($model->options['many_to_many'] as $field_key => $field): ?>
-					<?php echo View::factory('esup_pieces/form/many_to_many_checkbox', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
+					<?php echo View::factory('esup_pieces/form/many_to_many', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
 				<?php endforeach ?>
 			</div>
 		<?php endif ?>
@@ -54,7 +54,7 @@
 				<input type="submit" class="btn btn-primary" name="edit" value="Сохранить">
 			<?php endif ?>
 			<a href="/esup/<?php echo $model->options['render']['link'].$url_query ?>">
-				<input type="button" class="btn btn-secondary" value="Отмена">
+				<input type="button" class="btn" value="Отмена">
 			</a>
 		</div>
 	</div>
@@ -97,7 +97,9 @@
 		$('textarea.ckeditor-area').each(function(){
 			CKEDITOR.replace('form_'+$(this).attr('name'), {
 			    extraPlugins: 'imagepaste',
-			    filebrowserUploadUrl: '/esup/ckfileuploader'
+			    filebrowserUploadUrl: '/esup/ckfileuploader',
+			    filebrowserBrowseUrl: '/esup/fmanager/windowed?type=Files',
+				allowedContent: true
 			});
 		});
 	});

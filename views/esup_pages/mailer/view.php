@@ -2,7 +2,7 @@
 	<?php echo $model->options['render']['title'] ?> — просмотр
 	<a href="/esup/<?php echo $model->options['render']['link'].$url_query ?>">Назад к списку</a>
 </h3>
-<ul class="nav nav-tabs" style="margin-bottom: 1rem">
+<ul class="nav nav-tabs mb-3">
 	<li class="nav-item"><a class="nav-link active" href="#main" data-toggle="tab">Содержание письма</a></li>
 </ul>
 <div class="tab-content">

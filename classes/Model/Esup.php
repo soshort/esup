@@ -6,34 +6,33 @@ class Model_Esup extends ORM {
 
     protected $list_filtered = FALSE;
 
+    /* Возвращает поле, основанное на выбранном языке */
     public function get_prop($field) {
         return $this->{$field.self::$postfix};
     }
 
     /* Получить все элементы */
     public function get_items($limit = NULL, $offset = NULL, $sort_field = 'sort', $sort_direction = 'ASC') {
-        $model = $this->order_by($sort_field, $sort_direction)
+        $this->order_by($sort_field, $sort_direction)
             ->order_by('id', 'DESC');
         if (isset($limit)) {
-            $model = $model->limit($limit);
+            $this->limit($limit);
         }
         if (isset($offset)) {
-            $model = $model->offset($offset);
+            $this->offset($offset);
         }
-        $model = $model->find_all();
-        return $model;
+        return $this->find_all();
     }
 
-    /*public function get_items_as_array($id = 'id', $title = 'title', $default = NULL) {
-        if (empty($default)) {
-            return $this->get_items()
-                ->as_array($id, $title);
+    /* Устанавливает смещение для постраничности */
+    public function set_offset($page, $limit) {
+        if ($page == 1 || empty($page)) {
+            $this->offset(0);
         } else {
-            $result[NULL] = $default;
-            return $result + $this->get_items()
-                ->as_array($id, $title);
+            $this->offset($page * $limit - $limit);
         }
-    }*/
+        return $this;
+    }
 
     /* Окончания по числу */
     public function ending($count, $one, $two, $many) {
@@ -54,9 +53,34 @@ class Model_Esup extends ORM {
 
     /* Возвращает форматированную дату */
     public function format_date($ts_field, $text, $format = 'd F, Y') {
-        $date_str = date($format, $this->$ts_field);
-        $search = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-        $replace = array($text['january'], $text['february'], $text['march'], $text['april'], $text['may'], $text['june'], $text['july'], $text['august'], $text['september'], $text['october'], $text['november'], $text['december']);
+        $search = array(
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+        );
+        $replace = array(
+            $text['january'],
+            $text['february'],
+            $text['march'],
+            $text['april'],
+            $text['may'],
+            $text['june'],
+            $text['july'],
+            $text['august'],
+            $text['september'],
+            $text['october'],
+            $text['november'],
+            $text['december']
+        );
         return mb_strtolower(str_ireplace($search, $replace, date($format, $this->$ts_field)));
     }
 
@@ -103,12 +127,6 @@ class Model_Esup extends ORM {
             ->find();
     }
 
-    /* Возвращает url адрес изображения */
-    public function get_file_url($prefix = NULL, $dummy = TRUE) {
-        $file_name = (empty($prefix)) ? $this->file : $prefix.'_'.$this->file;
-        return ($this->loaded()) ? '/static/uploads/files/'.$file_name : (($dummy) ? '/static/images/no_photo.png' : '');
-    }
-
     /* Получение данных вместе с привязанными галереями */
     public function get_prop_with_gallery($field, $view) {
         $text = $this->get_prop($field);
@@ -140,7 +158,14 @@ class Model_Esup extends ORM {
                         $this->$key = $q['uuid'];
                     }
                 break;
-                case 'belongs_to':
+                case 'select2':
+                    if ($post_item) {
+                        $this->$key = $post_item;
+                    } else {
+                        $this->$key = NULL;
+                    }
+                break;
+                case 'belongs_to_text':
                     if ($post_item) {
                         $this->$key = $post_item;
                     } else {
@@ -178,10 +203,6 @@ class Model_Esup extends ORM {
                         } else {
                             $this->$key = $post_item;
                         }
-                        /* Обработка полей с HTML тегами, если TRUE */
-                        /*if (isset($item['code'])) {
-                            $this->{$key.self::$postfix} = html_entity_decode($this->$key, ENT_QUOTES, 'UTF-8');
-                        }*/
                     }
                 break;
             }
@@ -189,7 +210,7 @@ class Model_Esup extends ORM {
         //return $this;
     }
 
-    /* Заполнение много ко многим */
+    /* Заполнение Списки */
     public function save_many_to_many() {
         if (isset($this->options['many_to_many'])) {
             foreach ($this->options['many_to_many'] as $key => $item) {
@@ -205,20 +226,6 @@ class Model_Esup extends ORM {
                 $related_model = ORM::factory($this->_has_many[$option]['model'], $item);
                 $this->add($option, $related_model);
             }
-        }
-    }
-
-    /* Получение данных для формы select */
-    public function get_array_for_select($default = FALSE, $id_field = 'id', $title_field = 'title', $order_field = 'id', $order_direction = 'ASC') {
-        $res = DB::select('id', $title_field)
-            ->from($this->_table_name)
-            ->order_by($order_field, $order_direction)
-            ->execute()
-            ->as_array($id_field, $title_field);
-        if ($default === FALSE) {
-            return $res;
-        } else {
-            return array(NULL => 'Нет') + $res;
         }
     }
 
@@ -245,7 +252,7 @@ class Model_Esup extends ORM {
             '=' => '',      '\\' => '',   '|' => '',   '/' => '',   ',' => '',
             '~' => '',      '«' => '',   '»' => '',     ';' => '', '#' => '',
             '!' => '',      '№' => '',   '[' => '',     '{' => '',  '}' => '',
-            ']' => '',
+            ']' => ''
         ));
     }
 
@@ -312,13 +319,17 @@ class Model_Esup extends ORM {
 
     /* Возвращает хлебные крошки для модели */
     public function breadcrumbs($id, $parent_field = 'parent_id', $title_field = 'title', $result = array()) {
-        if (isset($id)) {
+        if (empty($id) == FALSE) {
             $db = DB::select('id', $parent_field, $title_field)
                 ->from($this->table_name())
                 ->where('id', '=', $id)
                 ->as_object()
                 ->execute()
                 ->current();
+            /* Return an empty array if record not found */
+            if (empty($db)) {
+                return $result;
+            }
             $result[] = array('id' => $db->id, 'title' => $db->$title_field);
             if ($db->$parent_field == NULL) {
                 return array_reverse($result);
@@ -328,16 +339,6 @@ class Model_Esup extends ORM {
         } else {
             return $result;
         }
-    }
-
-    /* Устанавливает смещение для постраничности */
-    public function set_offset($page, $limit) {
-        if ($page == 1 || empty($page)) {
-            $this->offset(0);
-        } else {
-            $this->offset($page * $limit - $limit);
-        }
-        return $this;
     }
 
     /* Возвращает массив id для указанной многоуровневой модели */

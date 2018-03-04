@@ -1,11 +1,11 @@
 <h3 class="main_header">
-	<?php echo $model->options['render']['title'] ?> — Epay Kazkom
+	<?php echo $model->options['render']['title'] ?> — Epay KKB
 	<a href="/esup/<?php echo $model->options['render']['link'].$url_query ?>">Назад к списку</a>
 </h3>
 <?php echo View::factory('esup_pages/settings/sets_of_settings') ?>
 <form role="form" action="/esup/settings/epay" enctype="multipart/form-data" method="post" id="main_form">
 	<ul class="nav nav-tabs">
-		<li class="nav-item active"><a class="nav-link active" href="#main" data-toggle="tab">Основные поля</a></li>
+		<li class="nav-item active"><a class="nav-link active" href="#main" data-toggle="tab">Описание</a></li>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="main">

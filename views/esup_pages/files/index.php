@@ -21,7 +21,13 @@
 						<tr>
 							<td><input type="checkbox" class="multiple-item" value="<?php echo $item->id ?>"></td>
 							<td><?php echo $item->id ?></td>
-							<td><a target="_blank" href="/static/uploads/files/<?php echo $item->file ?>"><span class="octicon octicon-browser"></span></a></td>
+							<td>
+								<?php if ($item->item_id == NULL): ?>
+									<a href="/static/uploads/uploaded_files/1280x1024_<?php echo $item->file ?>"><span class="octicon octicon-browser"></span></a>
+								<?php else: ?>
+									<a href="/static/uploads/files/<?php echo $item->file ?>"><span class="octicon octicon-browser"></span></a>
+								<?php endif ?>
+							</td>
 							<td>
 								<a href="/esup/<?php echo $model->options['render']['link'] ?>/edit/<?php echo $item->id ?>"><?php echo $item->original_name ?></a>
 							</td>

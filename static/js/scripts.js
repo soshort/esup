@@ -104,6 +104,28 @@ $(function(){
 
 	/* Tooltip */
 	$('[data-toggle="tooltip"]').tooltip();
+
+	/* Select2 init */
+	$('.filter-select2, .form-select2').select2({
+		allowClear: true,
+		theme: 'bootstrap',
+		width: '100%',
+		templateResult: function(data){
+			var element = $(data.element),
+				wrapper = $('<span></span>');
+			if (element == false) {
+				return data.text;
+			}
+			wrapper.css('padding', element.css('padding'));
+			wrapper.text(data.text);
+			return wrapper;
+		}
+	}).on('select2:select', function (e) {
+		if (e.params.data.element.value == '') {
+			return false;
+		}
+  		//console.log(e.params.data.element.value)
+	});
 });
 
 function notification(status, message) {

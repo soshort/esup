@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-Route::set('esup common modules', 'esup(/<controller>(/<action>(/<id>)))', array('controller' => 'esup|administrators|settings|files|mailer|fmanager|languages|text|sorting|maps|auth'))
+Route::set('esup common modules', 'esup(/<controller>(/<action>(/<id>)))', array('controller' => 'esup|administrators|settings|files|mailer|fmanager|languages|text|sorting|maps|auth|ckfileuploader'))
 	->defaults(
 		array(
 			'controller' => 'Esup',

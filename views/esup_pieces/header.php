@@ -25,7 +25,7 @@
 		</form>
 		<span class="navbar-text mr-sm-2 menu-languages">
 			<?php foreach ($languages as $key => $language): ?>
-				<a href="/esup/languages/set/<?php echo $key ?>" title="<?php echo $language['title'] ?>"><button class="btn <?php echo ($session->get('lang', 'ru') == $key) ? 'btn-outline-secondary' : 'btn-light' ?>" type="button"><?php echo $language['visible_name'] ?></button></a>
+				<a href="/esup/languages/set/<?php echo $key ?>" title="<?php echo $language['title'] ?>"><button class="btn <?php echo ($session->get('lang', 'ru') == $key) ? '' : 'btn-light' ?>" type="button"><?php echo $language['visible_name'] ?></button></a>
 			<?php endforeach ?>
 		</span>
 		<span class="navbar-text mr-sm-2">Привет, <?php echo $admin->fio ?></span>
