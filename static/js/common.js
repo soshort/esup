@@ -33,7 +33,7 @@ $(function(){
 	$('.file').on('change', 'input[name^="file_main_"]', function(){
 		var t = $(this);
 		$('.loading').addClass('d-lg-block');
-		$.post('/esup/files/set_main', { id: t.attr('data-file-id'), item_id: t.attr('data-item-id'), table: t.attr('data-item-table') }, function(data){
+		$.post('/esup/files/set_main', { id: t.attr('data-file-id'), item_id: t.attr('data-item-id'), group_name: t.attr('data-item-group-name') }, function(data){
 			$('.loading').removeClass('d-lg-block');
 			if (data.status == 'error') {
 				notification(data.status, data.message);
@@ -47,7 +47,7 @@ $(function(){
 		$('.loading').addClass('d-lg-block');
 		$.post(t.attr('href'), { degrees: t.attr('data-degrees') }, function(data){
 			$('.loading').removeClass('d-lg-block');
-			t.parents('.flex_item').find('.img-rounded').attr('src', t.parents('.flex_item').find('.img-rounded').attr('src') + '?' + new Date().getTime())
+			t.parents('.flex_item').find('.rounded').attr('src', t.parents('.flex_item').find('.rounded').attr('src') + '?' + new Date().getTime())
 			if (data.status == 'error') {
 				notification(data.status, data.message);
 			}
@@ -126,6 +126,23 @@ $(function(){
 		}
   		//console.log(e.params.data.element.value)
 	});
+
+	/* Toggle filters */
+	$(document).on('click', '.filter-list .card-header', function(){
+		var t = $(this);
+		t.next().slideToggle(200);
+	});
+
+	/* Copy to clipboard */
+	$('table').on('click', '.copy-to-clipboard', function(){
+		var t = $(this),
+			tmp = $('<input>');
+		$('body').append(tmp);
+		tmp.val(t.prev().text()).select();
+		document.execCommand('copy');
+		tmp.remove();
+		return false;
+	});
 });
 
 function notification(status, message) {
@@ -146,8 +163,4 @@ function notification(status, message) {
 	} else {
 		console.log(message);
 	}
-}
-
-function isInt(value) { 
-    return !isNaN(parseInt(value,10)) && (parseFloat(value,10) == parseInt(value,10)); 
 }

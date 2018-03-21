@@ -10,7 +10,6 @@ class Model_Esup_Slider extends Model_Esup {
 		)
 	);
 	protected $_has_many = array(
-
 		'files' => array(
 			'model'  => 'Esup_Common_File',
 			'foreign_key' => 'item_id'
@@ -21,7 +20,8 @@ class Model_Esup_Slider extends Model_Esup {
 		'fields' => array(
             'active' => array(
                 'label' => 'Активен',
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'default' => TRUE
             ),
 			'title' => array(
 				'label' => 'Заголовок',
@@ -56,17 +56,19 @@ class Model_Esup_Slider extends Model_Esup {
 			'slider_image' => array(
 				'label' => 'Изображение',
 				'thumbnails' => array(
-					'1500x450' => array(
-						'w' => 1500,
-						'h' => 450,
-						'with_bg' => TRUE
-						/*'crop' => array('x' => NULL, 'y' => NULL)*/
+					'1366x768' => array(
+						'w' => 1366,
+						'h' => 768,
+						'background' => array(
+							'color' => '#F1F1F1'
+						)
 					),
 				),
-				/*'esup_fullsize' => '1366x600',
-				'esup_thumbnail' => '1366x600',
-				'remove_original' => TRUE*/
-				'multiple' => TRUE
+				'esup_thumbnail' => '1366x768',
+				/*'multiple' => TRUE,*/
+				/* Aspect ratio example options */
+				'ar_width' => '16',
+				'ar_height' => '9'
 			)
 		),
 		'filters' => array(

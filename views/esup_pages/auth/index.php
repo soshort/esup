@@ -19,7 +19,7 @@
 				<input name="csrf" type="hidden" value="<?php echo Security::token() ?>">
 				<input type="submit" class="btn btn-primary" name="auth" value="Войти" />
 			</div>
-	    	<?php if (isset($error) && $error == TRUE): ?>
+	    	<?php if (isset($error) AND $error == TRUE): ?>
 	        	<div class="alert alert-danger">Неверный логин или пароль.</div>
 	    	<?php endif ?>
 		</form>

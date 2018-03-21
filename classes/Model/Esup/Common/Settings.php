@@ -32,16 +32,6 @@ class Model_Esup_Common_Settings extends Model_Esup {
                     'title' => 'Поиск'
                 )
             ),
-			/*'set' => array(
-				'type' => 'select',
-				'model' => 'Esup_Common_Settings',
-				'fields' => 'set',
-				'render' => array(
-					'model_title_field' => 'set',
-					'model_value_field' => 'set',
-					'title' => 'Набор'
-				)
-			),*/
 			'set' => array(
 				'type' => 'select2',
 				'model' => 'Esup_Common_Settings',
@@ -61,31 +51,28 @@ class Model_Esup_Common_Settings extends Model_Esup {
 		)
 	);
 
-	public function get_available_sets() {
-		return DB::select('set')
-			->from($this->_table_name)
-			->distinct('set')
-			->execute()
-			->as_array();
-	}
-
-    public function get_config_db() {
+    public function get_config_db()
+    {
     	$cache_instance = Cache::instance(CACHE_DRIVER);
         $result = $cache_instance->get(CP.'config_db_site');
-        if ($result) {
+        if ($result)
+        {
             $data_source = $result;
         }
-        if (empty($data_source)) {
+        if (empty($data_source))
+        {
             $data_source = $this->_get_config_db();
             $cache_instance->set(CP.'config_db_site', $data_source);
         }
         return $data_source;
     }
 
-	private function _get_config_db() {
+	private function _get_config_db()
+	{
 		$res = array();
 		$model = $this->find_all();
-		foreach ($model as $key => $item) {
+		foreach ($model as $key => $item)
+		{
 			$res[$item->name] = $item->value;
 		}
 		return $res;

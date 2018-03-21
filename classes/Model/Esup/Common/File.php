@@ -2,15 +2,6 @@
  
 class Model_Esup_Common_File extends Model_Esup {
 
-    protected $_table_name = 'files';
-
-    public $file_path;
-    public $file_path_unsigned;
-    public $file_name;
-    public $file_extension;
-    public $full_name;
-    public $img_extensions = array('jpg', 'png', 'jpeg', 'gif', 'bmp');
-    public $file_path_info = array();
     public $options = array(
         'fields' => array(
             'description' => array(
@@ -35,161 +26,178 @@ class Model_Esup_Common_File extends Model_Esup {
         )
     );
 
-    public function __construct($id = NULL) {
+    protected $_table_name = 'files';
+
+    private $config = array();
+    private $source = '';
+    private $source_name = '';
+    private $source_extension = '';
+    private $source_path_info = array();
+    private $img_extensions = array('jpg', 'png', 'jpeg', 'gif', 'bmp');
+
+    public function __construct($id = NULL)
+    {
         parent::__construct($id);
-        $this->file_path = Kohana::$config->load('esup.files_dir');
-        if (is_dir($this->file_path) == FALSE) {
-            mkdir($this->file_path, 0755, TRUE);
-        }
+        $this->config = Kohana::$config->load('esup.files');
     }
 
-    public function set_path($path) {
-        $this->file_path = $path;
+    /* Sets the working directory */
+    public function set_dir($dir)
+    {
+        $this->config['dir'] = $dir;
         return $this;
     }
 
-    /* Сохранение файла */
-    public function save_file($file, $table_name, $item_id, $file_main_lable) {
-        $this->file_path_info = pathinfo($file['name']);
-        $this->file_name = md5(md5_file($file['tmp_name']).time());
-        $this->file_extension = strtolower($this->file_path_info['extension']);
-        $this->full_name = Upload::save($file, $this->file_name.'.'.$this->file_extension, $this->file_path);
-        if ($this->full_name == FALSE) {
+    /* Uploads the file and link it to the model */
+    public function save_file($file, $group_name, $item_id, $main_file)
+    {
+        if ( ! $this->set_source($file))
             return FALSE;
-        }
-        /* Если файл является изображением, то пережимаем его */
-        if ($this->is_image($this->file_extension)) {
-            /* Если размер изображения больше 500кб, сохраняем как .jpg */
-            if ($file['size'] > 512000) {
-                $image = Image::factory($this->full_name);
-                $image->save(str_replace('.'.$this->file_extension, '.jpg', $image->file), 80);
-                /* Если файл не является .jpg, то удаляем оригинал изображения */
-                if ($this->file_extension != 'jpg') {
-                    if (is_file($this->full_name)) {
-                        unlink($this->full_name);
-                    }
-                }
-                $this->file_extension = 'jpg';
-                $this->full_name = str_replace('.'.$this->file_path_info['extension'], '.jpg', $image->file);
+        /* If the file is an image, then resize it */
+        if ($this->is_image($this->source_extension))
+        {
+            $image = Image::factory($this->source);
+            if ($image->width > $this->config['images']['max_width'] OR $image->height > $this->config['images']['max_height'])
+            {
+                $image->resize($this->config['images']['max_width'], $this->config['images']['max_height']);
             }
+            $image->save($this->source, 90);
         }
-        $this->table_name = $table_name;
+        $this->group_name = $group_name;
         $this->item_id = $item_id;
-        $this->file = $this->file_name.'.'.$this->file_extension;
-        $this->original_name = $file['name'];
-        $this->extension = $this->file_extension;
+        $this->file = $this->source_name.'.'.$this->source_extension;
+        $this->original_name = $this->source_path_info['filename'];
+        $this->extension = $this->source_extension;
         $this->creation_time = time();
-        $this->main = $file_main_lable;
+        $this->main = $main_file;
         $this->save();
         return $this;
     }
 
-    /* Сохранение файла из указанного URL */
-    public function save_file_from_url($url, $table_name, $item_id, $file_main_lable) {
-        $raw_data = file_get_contents($url);
-        $original_name = basename(parse_url($url, PHP_URL_PATH));
-        $this->file_path_info = pathinfo($url);
-        $this->file_name = md5(time().$original_name);
-        $this->file_extension = strtolower($this->file_path_info['extension']);
-        $this->full_name = $this->file_path.$this->file_name.'.'.$this->file_extension;
-        file_put_contents($this->full_name, $raw_data);
-        $this->table_name = $table_name;
-        $this->item_id = $item_id;
-        $this->file = $this->file_name.'.'.$this->file_extension;
-        $this->original_name = $original_name;
-        $this->extension = $this->file_extension;
-        $this->creation_time = time();
-        $this->main = $file_main_lable;
-        $this->save();
+    /* Creates image thumbnails */
+    public function thumbnail($thumbnail)
+    {
+        $image = Image::factory($this->source);
+        if ($bg = Arr::get($thumbnail, 'background'))
+        {
+            $image->thumbnail($thumbnail['w'], $thumbnail['h'], $bg['color']);
+        }
+        else
+        {
+            $w = ($image->width > $thumbnail['w']) ? $thumbnail['w'] : $image->width;
+            $h = ($image->height > $thumbnail['h']) ? $thumbnail['h'] : $image->height;
+            $image->resize($w, $h);
+        }
+        $image->save($this->config['dir'].$thumbnail['w'].'x'.$thumbnail['h'].'_'.$this->file);
         return $this;
     }
 
-    /* Создание thumbnails */
-    public function save_thumbnail($thumbnail) {
-        $image = Image::factory($this->full_name);
-        if (isset($thumbnail['crop'])) {
-            $image->resize($thumbnail['w'], $thumbnail['h'], Image::INVERSE);
-            $image->crop($thumbnail['w'], $thumbnail['h'], $thumbnail['crop']['x'], $thumbnail['crop']['y']);
-        } else {
-            if (isset($thumbnail['with_bg'])) {
-                $image->thumbnail($thumbnail['w'], $thumbnail['h'], '#F1F1F1');
-            } else {
-                $w = ($image->width > $thumbnail['w']) ? $thumbnail['w'] : $image->width;
-                $h = ($image->height > $thumbnail['h']) ? $thumbnail['h'] : $image->height;
-                $image->resize($w, $h, NULL);
-            }
-            /*if ($image->width > $thumbnail['w'] || $image->height > $thumbnail['h']) {
-                $image->resize($thumbnail['w'], $thumbnail['h'], NULL);
-            }*/
-        }
-        $image->save($this->file_path.$thumbnail['w'].'x'.$thumbnail['h'].'_'.$this->file);
-        return $this;
-    }
-
-    /* Удаление файла */
-    public function delete_file($original_only = FALSE) {
-        if ($original_only) {
-            if (is_file($this->file_path.$this->file)) {
-                unlink($this->file_path.$this->file);
-            }            
-        } else {
-            $_unlink = function($full_name) {
-                if (is_file($full_name)) {
-                    unlink($full_name);
-                }
-            };
-            $mask = glob($this->file_path.'*'.$this->file);
-            if (is_array($mask) == FALSE) {
-                $mask = array();
-            }
-            array_map($_unlink, $mask);
-            $this->delete();
-        }
-        return $this;
-    }
-
-    /* Возвращает TRUE если файл является изображением */
-    public function is_image($extension = '') {
-        if (in_array($this->extension, $this->img_extensions) || in_array($extension, $this->img_extensions)) {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-    }
-
-    /* Повернуть изображение. */
-    public function rotate_file($degrees) {
-        $_rotate = function($full_name, $degrees) {
-            if (is_file($full_name)) {
-                $image = Image::factory($full_name);
-                $image->rotate($degrees);
-                $image->save();
+    /* Unlinks the file */
+    public function delete_file()
+    {
+        $_unlink = function($full_name)
+        {
+            if (is_file($full_name))
+            {
+                unlink($full_name);
             }
         };
-        foreach (glob($this->file_path.'*'.$this->file) as $key => $filename) {
+        $mask = glob($this->config['dir'].'*'.$this->file);
+        if ( ! is_array($mask))
+        {
+            $mask = array();
+        }
+        array_map($_unlink, $mask);
+        $this->delete();
+        return $this;
+    }
+
+    /* Crops the image and its thumbnails */
+    public function crop_image($options, $json_string)
+    {
+        $crop_data = json_decode($json_string);
+        $source_path = $this->config['dir'].$this->file;
+        foreach (Arr::get($options, 'thumbnails', array()) as $thumb_name => $thumb_arr)
+        {
+            $image = Image::factory($source_path)
+                ->crop($crop_data->width, $crop_data->height, $crop_data->x, $crop_data->y)
+                ->resize($thumb_arr['w'], $thumb_arr['h'])
+                ->save($this->config['dir'].$thumb_name.'_'.$this->file);
+        }
+        $this->crop_data = $json_string;
+        $this->creation_time = time();
+        $this->save();
+        return $this;
+    }
+
+    /* Rotates the image */
+    public function rotate_image($degrees)
+    {
+        $_rotate = function($full_name, $degrees)
+        {
+            if (is_file($full_name))
+            {
+                $image = Image::factory($full_name)
+                    ->rotate($degrees)
+                    ->save();
+            }
+        };
+        foreach (glob($this->config['dir'].'*'.$this->file) as $key => $filename)
+        {
             $mask[] = $filename;
             $_degrees[] = $degrees;
         }
         array_map($_rotate, $mask, $_degrees);
+        $this->creation_time = time();
+        $this->save();
+        return $this;
     }
 
-    /* Приведение массива $_FILES к удобному для обработки виду */
-    public function array_correction(&$file) {
-        $file_array = array();
-        $file_count = count($file['name']);
-        $file_keys = array_keys($file);
-        for ($i = 0; $i < $file_count; $i++) {
-            foreach ($file_keys as $key) {
-                $file_array[$i][$key] = $file[$key][$i];
+    /* Returns TRUE if the file is image */
+    public function is_image($extension = '')
+    {
+        if (in_array($this->extension, $this->img_extensions) OR in_array($extension, $this->img_extensions))
+            return TRUE;
+        else
+            return FALSE;
+    }
+
+    /* Corrects multiple $_FILES array */
+    public function array_correction(&$file)
+    {
+        $result = array();
+        $count = count($file['name']);
+        $keys = array_keys($file);
+        for ($i = 0; $i < $count; $i++)
+        {
+            foreach ($keys as $key)
+            {
+                $result[$i][$key] = $file[$key][$i];
             }
         }
-        return $file_array;
+        return $result;
     }
 
-    /* Возвращает url адрес изображения */
-    public function get_file_url($prefix = NULL, $dummy = TRUE) {
+    /* Returns file url */
+    public function get_file_url($prefix = NULL, $dummy = TRUE)
+    {
         $file_name = (empty($prefix)) ? $this->file : $prefix.'_'.$this->file;
-        return ($this->loaded()) ? '/static/uploads/files/'.$file_name : (($dummy) ? '/static/images/no_photo.png' : '');
+        if ($this->loaded())
+            return '/static/uploads/files/'.$file_name.'?ts='.$this->creation_time;
+        else
+            return $dummy ? '/static/images/no-image.svg' : '';
+    }
+
+    /* Sets a source of the file to work with */
+    private function set_source($file)
+    {
+        $this->source_path_info = pathinfo($file['name']);
+        $this->source_name = md5(md5_file($file['tmp_name']).time());
+        $this->source_extension = strtolower($this->source_path_info['extension']);
+        $this->source = Upload::save($file,
+            $this->source_name.'.'.$this->source_extension,
+            $this->config['dir']);
+        return (empty($this->source)) ? FALSE : TRUE;
     }
 
 }

@@ -22,7 +22,7 @@
 							<td><input type="checkbox" class="multiple-item" value="<?php echo $item->id ?>"></td>
 							<td><?php echo $item->id ?></td>
 							<td>
-								<?php if (empty($item->_to) == FALSE && ($item->_to[0] == '{' || $item->_to[0] == '[')): ?>
+								<?php if (empty($item->_to) == FALSE AND ($item->_to[0] == '{' OR $item->_to[0] == '[')): ?>
 									<a href="/esup/mailer/view/<?php echo $item->id.$url_query ?>">
 										<?php $arr = json_decode($item->_to, TRUE); foreach ($arr as $e_key => $email): ?>
 											<?php echo $email; echo (count($arr) == $e_key + 1) ? ',' : '' ?>

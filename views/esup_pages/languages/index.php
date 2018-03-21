@@ -47,14 +47,3 @@
 <div class="alert alert-warning">
 	Внимание! При удалении языка будет удалена вся информация связанная с ним. Для отключения языка просто снимите галочку в колонке «активен».
 </div>
-<script type="text/javascript">
-	$(function(){
-		$('.lang_active').change(function(){
-			$.post('/esup/languages/active', { id: $(this).attr('id'), value: $(this).prop('checked') }, function(data){
-				if (data.status == 'error') {
-					console.log(data.message);
-				}
-			}, 'JSON');
-		});
-	});
-</script>

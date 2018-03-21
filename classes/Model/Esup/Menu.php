@@ -25,7 +25,8 @@ class Model_Esup_Menu extends Model_Esup {
         'fields' => array(
             'active' => array(
                 'label' => 'Активен',
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'default' => TRUE
             ),
 			'title' => array(
 				'type' => 'text',

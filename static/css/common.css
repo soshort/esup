@@ -149,7 +149,7 @@ input[readonly], textarea[readonly] {
 
 .left-filter-list a.has-children {
 	position: absolute;
-	left: -3px;
+	left: 0;
 }
 
 .left-filter-list li ul {

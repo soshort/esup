@@ -1,9 +1,12 @@
 <?php
 	$id = Arr::get($_GET, $field['default_query_name']);
-	if (isset($field['nested'])) {
+	if (isset($field['nested']))
+	{
 		$related_model = ORM::factory($field['model'], $id);
 		$selected_items = $related_model->get_ids_tree($related_model);
-	} else {
+	}
+	else
+	{
 		$selected_items = array($id);
 	}
 ?>

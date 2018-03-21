@@ -4,7 +4,10 @@ class Controller_Esup_Common_Text extends Controller_Esup_Common_Crud {
 
 	public $model_name = 'Esup_Common_Text';
 
-	public function action_index() {
+	protected $access_level = 10;
+
+	public function action_index()
+	{
 		$limit = $this->config_db['items_per_page'];
 		$model = ORM::factory($this->model_name);
 		$list = $model;
@@ -23,24 +26,32 @@ class Controller_Esup_Common_Text extends Controller_Esup_Common_Crud {
 			->set('model', $model);
 	}
 
-	public function action_add() {
+	public function action_add()
+	{
 		$model = ORM::factory($this->model_name);
-		if (Arr::get($_POST, 'add')) {
+		if (Arr::get($_POST, 'add'))
+		{
 			$model->fill($model->options['fields']);
-			try {
+			try
+			{
 				$model->save();
 				$model->clear_text_cache();
 				$this->session->set('flash', array(
 					'status' => 'ok',
 					'message' => 'Запись добавлена.'
 				));
-			} catch (Exception $e) {
-				if ($e->getCode() == 1062) {
+			}
+			catch (Exception $e)
+			{
+				if ($e->getCode() == 1062)
+				{
 					$this->session->set('flash', array(
 						'status' => 'error', 
 						'message' => 'Дублирование уникального идентификатора.'
 					));
-				} else {
+				}
+				else
+				{
 					$this->session->set('flash', array(
 						'status' => 'error', 
 						'message' => $e->getMessage().'. Code: '.$e->getCode().'.'
@@ -48,41 +59,55 @@ class Controller_Esup_Common_Text extends Controller_Esup_Common_Crud {
 				}
 			}
 			$this->redirect('esup/'.$model->options['render']['link'].$this->url_query);
-		} else {
-			if (isset($model->options['render']['form'])) {
+		}
+		else
+		{
+			if (isset($model->options['render']['form']))
+			{
 				$this->template->content = View::factory('esup_pieces/default_form');
-			} else {
+			}
+			else
+			{
 				$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/add');
 			}
 			$this->template->content->set('model', $model);
 		}
 	}
 
-	public function action_edit() {
+	public function action_edit()
+	{
 		$model = ORM::factory($this->model_name, $this->request->param('id'));
-		if ($model->loaded() == FALSE) {
+		if ($model->loaded() == FALSE)
+		{
 			$this->session->set('flash', array(
 				'status' => 'error',
 				'message' => 'Запись не найдена.'
 			));
 			$this->redirect('esup/'.$model->options['render']['link'].$this->url_query);
 		}
-		if (Arr::get($_POST, 'edit')) {
+		if (Arr::get($_POST, 'edit'))
+		{
 			$model->fill($model->options['fields']);
-			try {
+			try
+			{
 				$model->save();
 				$model->clear_text_cache();
 				$this->session->set('flash', array(
 					'status' => 'ok',
 					'message' => 'Запись отредактирована.'
 				));
-			} catch (Exception $e) {
-				if ($e->getCode() == 1062) {
+			}
+			catch (Exception $e)
+			{
+				if ($e->getCode() == 1062)
+				{
 					$this->session->set('flash', array(
 						'status' => 'error', 
 						'message' => 'Дублирование уникального идентификатора.'
 					));
-				} else {
+				}
+				else
+				{
 					$this->session->set('flash', array(
 						'status' => 'error', 
 						'message' => $e->getMessage().'. Code: '.$e->getCode().'.'
@@ -91,24 +116,31 @@ class Controller_Esup_Common_Text extends Controller_Esup_Common_Crud {
 			}
 			$this->redirect('esup/'.$model->options['render']['link'].'/edit/'.$model->id.$this->url_query);
 		}
-		if (Arr::get($model->options['render'], 'form')) {
+		if (Arr::get($model->options['render'], 'form'))
+		{
 			$this->template->content = View::factory('esup_pieces/default_form');
-		} else {
+		}
+		else
+		{
 			$this->template->content = View::factory('esup_pages/'.$model->options['render']['link'].'/edit');
 		}
 		$this->template->content->set('model', $model);
 	}
 
-	public function action_delete() {
+	public function action_delete()
+	{
 		$model = ORM::factory($this->model_name, $this->request->param('id'));
-		if ($model->loaded()) {
+		if ($model->loaded())
+		{
 			$model->clear_text_cache();
 			$model->delete();
 			$this->session->set('flash', array(
 				'status' => 'ok',
 				'message' => 'Запись удалена.'
 			));
-		} else {
+		}
+		else
+		{
 			$this->session->set('flash', array(
 				'status' => 'error',
 				'message' => 'Запись не найдена.'
@@ -117,14 +149,18 @@ class Controller_Esup_Common_Text extends Controller_Esup_Common_Crud {
 		$this->redirect('esup/'.$model->options['render']['link'].$this->url_query);
 	}
 
-	public function action_multiple() {
+	public function action_multiple()
+	{
 		$count = 0;
 		$items = array_filter(explode(',', Arr::get($_POST, 'items', '')));
 		$action = Arr::get($_POST, 'action', '');
-		if ($action == 'delete') {
-			foreach ($items as $key => $id) {
+		if ($action == 'delete')
+		{
+			foreach ($items as $key => $id)
+			{
 				$model = ORM::factory($this->model_name, $id);
-				if ($model->loaded()) {
+				if ($model->loaded())
+				{
 					$model->delete();
 					$count = $count + 1;
 				}
@@ -133,7 +169,9 @@ class Controller_Esup_Common_Text extends Controller_Esup_Common_Crud {
 				'status' => 'ok',
 				'message' => 'Удалено '.$count.' из '.count($items).' элементов.'
 			));
-		} else {
+		}
+		else
+		{
 			$this->session->set('flash', array(
 				'status' => 'error',
 				'message' => 'Выберите действие.'

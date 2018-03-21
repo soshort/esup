@@ -1,7 +1,10 @@
 <?php
-	if ($model->loaded()) {
+	if ($model->loaded())
+	{
 		$selected_items = array($model->$key);
-	} else {
+	}
+	else
+	{
 		$selected_items = array(Arr::get($_GET, $key));
 	}
 ?>

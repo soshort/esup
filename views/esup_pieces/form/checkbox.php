@@ -1,7 +1,10 @@
 <?php 
-	if ($model->$key === NULL && isset($field['default'])) {
+	if ($model->$key === NULL AND isset($field['default']))
+	{
 		$checked = ($field['default']) ? 1 : 0;
-	} else {
+	}
+	else
+	{
 		$checked = $model->$key;
 	}
 ?>

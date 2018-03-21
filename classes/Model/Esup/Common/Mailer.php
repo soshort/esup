@@ -24,33 +24,44 @@ class Model_Esup_Common_Mailer extends Model_Esup {
         )
     );
 
-    public function __construct($id = NULL) {
+    public function __construct($id = NULL)
+    {
         parent::__construct($id);
         $this->config = Kohana::$config->load('email');
         $this->config_options = $this->config->get('options');
     }
 
     /* Отправить все письма со статусом "не отправлено" */
-    public function send($limit = NULL) {
+    public function send($limit = NULL)
+    {
         Email::connect($this->config);
-        if ($this->loaded()) {
+        if ($this->loaded())
+        {
             $this->email_stack[] = $this;
         }
-        if (empty($this->email_stack)) {
+        if (empty($this->email_stack))
+        {
             $items = $this->where('status', '!=', 1)
                 ->order_by('id', 'ASC')
                 ->limit($limit)
                 ->find_all();
-        } else {
+        }
+        else
+        {
             $items = $this->email_stack;
         }
         $total = count($items);
         $sended = 0;
-        foreach ($items as $key => $item) {
-            try {
-                if ($item->_to[0] == '{' || $item->_to[0] == '[') {
+        foreach ($items as $key => $item)
+        {
+            try
+            {
+                if ($item->_to[0] == '{' OR $item->_to[0] == '[')
+                {
                     $to = json_decode($item->_to, TRUE);
-                } else {
+                }
+                else
+                {
                     $to = $item->_to;
                 }
                 Email::send($to, $this->config_options['username'], $item->subject, $item->message, $html = TRUE);
@@ -59,7 +70,9 @@ class Model_Esup_Common_Mailer extends Model_Esup {
                 $item->mailer_response = 'ok';
                 $item->save();
                 $sended++;
-            } catch (Exception $e) {
+            }
+            catch (Exception $e)
+            {
                 $item->status = 2;
                 $item->_from = $this->config_options['username'];
                 $item->mailer_response = $e->getMessage();
@@ -69,11 +82,16 @@ class Model_Esup_Common_Mailer extends Model_Esup {
         return array('total' => $total, 'sended' => $sended);
     }
 
-    private function _send($item) {
-        try {
-            if ($item->_to[0] == '{' || $item->_to[0] == '[') {
+    private function _send($item)
+    {
+        try
+        {
+            if ($item->_to[0] == '{' OR $item->_to[0] == '[')
+            {
                 $to = json_decode($item->_to, TRUE);
-            } else {
+            }
+            else
+            {
                 $to = $item->_to;
             }
             Email::send($to, $this->config_options['username'], $item->subject, $item->message, $html = TRUE);
@@ -82,7 +100,9 @@ class Model_Esup_Common_Mailer extends Model_Esup {
             $item->_from = $this->config_options['username'];
             $item->save();
             return TRUE;
-        } catch (Exception $e) {
+        }
+        catch (Exception $e)
+        {
             $item->status = 2;
             $item->mailer_response = $e->getMessage();
             $item->_from = $this->config_options['username'];
@@ -91,12 +111,17 @@ class Model_Esup_Common_Mailer extends Model_Esup {
         }
     }
 
-    public function add_email($options) {
-        if (isset($options['to'])) {
-            if (is_array($options['to'])) {
+    public function add_email($options)
+    {
+        if (isset($options['to']))
+        {
+            if (is_array($options['to']))
+            {
                 $options['to'] = json_encode($options['to']);
             }
-        } else {
+        }
+        else
+        {
             $options['to'] = $this->config_options['inbox'];
         }
         $email = ORM::factory('Esup_Common_Mailer');

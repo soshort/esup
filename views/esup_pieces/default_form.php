@@ -1,12 +1,11 @@
-<!-- CKEditor -->
-<script src="https://cdn.ckeditor.com/4.5.11/full/ckeditor.js"></script>
-<!-- Yandex Maps -->
-<script src="http://api-maps.yandex.ru/2.0/?load=package.full&amp;lang=ru-RU" type="text/javascript"></script>
 <?php
-	if (Request::$initial->action() == 'add') {
+	if (Request::$initial->action() == 'add')
+	{
 		$action_title = 'добавление';
 		$action_link = '/esup/'.$model->options['render']['link'].'/add'.$url_query;
-	} else {
+	}
+	else
+	{
 		$action_title = 'редактирование';
 		$action_link = '/esup/'.$model->options['render']['link'].'/edit/'.$model->id.$url_query;
 	}
@@ -33,8 +32,8 @@
 		</div>
 		<?php if (isset($model->options['files'])): ?>
 			<div class="tab-pane" id="files">
-				<?php foreach ($model->options['files'] as $field_key => $field): ?>
-					<?php echo View::factory('esup_pieces/form/files', array('model' => $model, 'field' => $field, 'key' => $field_key)) ?>
+				<?php foreach ($model->options['files'] as $group_name => $group): ?>
+					<?php echo View::factory('esup_pieces/form/files', array('model' => $model, 'group' => $group, 'group_name' => $group_name)) ?>
 				<?php endforeach ?>
 			</div>
 		<?php endif ?>
@@ -62,45 +61,3 @@
 <?php if (isset($model->options['render']['hint'])): ?>
 	<div class="alert alert-warning"><?php echo $model->options['render']['hint'] ?></div>
 <?php endif ?>
-<script type="text/javascript">
-	$(function(){
-		/* Вкладки по умолчанию */
-		var form_action = $('#main_form').attr('action');
-		var hash = window.location.hash;
-		$('form').attr('action', form_action+hash);
-		$('ul.nav a[href="' + hash + '"]').tab('show');
-		$(document).on('click', '.nav-tabs a', function(e){
-			$(this).tab('show');
-			var scrollmem = $('body').scrollTop();
-			window.location.hash = this.hash;
-			$('form').attr('action', form_action+this.hash);
-			$('html,body').scrollTop(scrollmem);
-		});
-
-		/* Календарь */
-		$('.datepicker').datepicker({
-			dateFormat: 'dd.mm.yy',
-		    onSelect: function(datetext, inst){
-		    	if ($(inst.input).is('.with-time')) {
-			        var d = new Date();
-			        var h = (d.getHours() < 10 ? '0' : '') + d.getHours();
-			        var m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-			        var s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
-			        datetext = datetext + " " + h + ":" + m + ":" + s;
-			        $(this).val(datetext);
-		    	}
-		    },
-		}, $.datepicker.regional['ru']);
-
-		/* Ckeditor */
-		CKEDITOR.plugins.addExternal('imagepaste', '/static/lib/ckeditor/custom/plugins/imagepaste/', 'plugin.js');
-		$('textarea.ckeditor-area').each(function(){
-			CKEDITOR.replace('form_'+$(this).attr('name'), {
-			    extraPlugins: 'imagepaste',
-			    filebrowserUploadUrl: '/esup/ckfileuploader',
-			    filebrowserBrowseUrl: '/esup/fmanager/windowed?type=Files',
-				allowedContent: true
-			});
-		});
-	});
-</script>

@@ -5,7 +5,8 @@
     "keywords": ["control panel", "crud", "admin", "administrator", "kohana", "koseven"],
     "homepage": "https://github.com/StefanTheBlade/esup",
     "require": {
+        "composer/installers": "~1.0",
         "studio-42/elfinder": "2.1.*",
-        "composer/installers": "~1.0"
+        "stolz/assets": "^0.1.11"
     }
 }

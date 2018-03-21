@@ -8,24 +8,22 @@
 <script type="text/javascript" charset="utf-8">
     // Helper function to get parameters from the query string.
     function getUrlParam(paramName) {
-        var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i') ;
-        var match = window.location.search.match(reParam) ;
-
-        return (match && match.length > 1) ? match[1] : '' ;
+        var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i'),
+            match = window.location.search.match(reParam);
+        return (match && match.length > 1) ? match[1] : '';
     }
 
     $(function(){
-        var funcNum = getUrlParam('CKEditorFuncNum');
-
-        var elf = $('#elfinder').elfinder({
-            url : '/esup/fmanager/init',
-            lang: 'ru',
-            getFileCallback : function(file) {
-                window.opener.CKEDITOR.tools.callFunction(funcNum, file);
-                window.close();
-            },
-            resizable: false
-        }).elfinder('instance');
+        var funcNum = getUrlParam('CKEditorFuncNum'),
+            elf = $('#elfinder').elfinder({
+                url : '/esup/fmanager/init',
+                lang: 'ru',
+                getFileCallback : function(file) {
+                    window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
+                    window.close();
+                },
+                resizable: false
+            }).elfinder('instance');
     });
 </script>
 <div id="elfinder"></div>

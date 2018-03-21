@@ -1,9 +1,9 @@
-<!-- Codeeditor -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/javascript/javascript.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/codemirror.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/ambiance.min.css">
-<style>.CodeMirror { height: 200px }</style>
+<style>
+	pre.ace_editor {
+		height: 200px;
+		border: solid 1px #dee2e6;
+	}
+</style>
 <h3 class="main_header">
 	<?php echo $model->options['render']['title'] ?> — скрипты
 	<a href="/esup/<?php echo $model->options['render']['link'].$url_query ?>">Назад к списку</a>
@@ -18,13 +18,15 @@
 			<div class="form-group row">
 				<label for="form_css" class="col-sm-2 col-form-label">CSS</label>
 				<div class="col-sm-10">
-					<textarea name="css" class="form-control" id="form_css" cols="30" rows="10"><?php echo $css ?></textarea>
+					<textarea id="form_css" data-editor="css" data-hidden-name="css"><?php echo $css ?></textarea>
+					<input type="hidden" name="css">
 				</div>
 			</div>
 			<div class="form-group row">
 				<label for="form_js" class="col-sm-2 col-form-label">JS</label>
 				<div class="col-sm-10">
-					<textarea name="js" class="form-control" id="form_js" cols="30" rows="10"><?php echo $js ?></textarea>
+					<textarea id="form_js" data-editor="javascript" data-hidden-name="js"><?php echo $js ?></textarea>
+					<input type="hidden" name="js">
 				</div>
 			</div>
 		</div>
@@ -35,15 +37,3 @@
 		</div>
 	</div>
 </form>
-<script>
-	var myCodeMirror = CodeMirror.fromTextArea(form_css, {
-		lineNumbers: true,
-		theme: 'ambiance'
-	});
-</script>
-<script>
-	var myCodeMirror = CodeMirror.fromTextArea(form_js, {
-		lineNumbers: true,
-		theme: 'ambiance'
-	});
-</script>

@@ -1,7 +1,9 @@
 <?php
-	if (empty($items)) {
+	if (empty($items))
+	{
 		$model = ORM::factory($options['model']);
-		if (isset($options['nested'])) {
+		if (isset($options['nested']))
+		{
 			$model = $model->where($options['nested']['field'], '=', NULL);
 		}
 		$items = $model->group_by($options['render']['value_field'])
@@ -9,15 +11,16 @@
 			->find_all();
 	}
 
-	if (empty($lvl)) {
+	if (empty($lvl))
+	{
 		$lvl = 0;
 	}
 ?>
-	
 <?php foreach ($items as $key => $item): ?>
 	<option value="<?php echo $item->{$options['render']['value_field']} ?>" <?php echo (in_array($item->id, $selected_items)) ? 'selected' : '' ?> style="padding: <?php echo $lvl ?>rem"><?php echo $item->get_prop($options['render']['title_field']) ?></option>
 	<?php
-		if (isset($options['nested'])) {
+		if (isset($options['nested']))
+		{
 			$sub_items = ORM::factory($options['model'])
 				->where($options['nested']['field'], '=', $item->id)
 				->group_by($options['render']['value_field'])

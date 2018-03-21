@@ -2,6 +2,8 @@
  
 class Model_Esup_Common_Map extends Model_Esup {
 
+	private $_map = array();
+
 	protected $_table_name = 'maps';
 
 	public $options = array(
@@ -43,5 +45,26 @@ class Model_Esup_Common_Map extends Model_Esup {
 			'link' => 'maps',
 		)
 	);
+
+	public function get_data($data_string, $value)
+	{
+		if (empty($this->_map))
+		{
+			$this->set_map($data_string);
+		}
+		return $this->_map[$value];
+	}
+
+	private function set_map($data_string)
+	{
+		$data_string = (empty($data_string)) ? '43.295904,76.943776:10' : $data_string;
+		$data = explode(':', $data_string);
+		$coordinates = explode(',', $data[0]);
+		$this->_map = array(
+			'lat' => $coordinates[0],
+			'lng' => $coordinates[1],
+			'zoom' => $data[1]
+		);
+	}
 
 }

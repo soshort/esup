@@ -1,6 +1,6 @@
 <?php 
 	$parent_field = $model->options['render']['tree_structure']['field'];
-	$breadcrumbs = $model->breadcrumbs(Arr::get($_GET, $parent_field))
+	$breadcrumbs = $model->breadcrumbs(Arr::get($_GET, $parent_field));
 ?>
 <nav aria-label="breadcrumb">
 	<ol class="breadcrumb">

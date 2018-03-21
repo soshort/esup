@@ -11,7 +11,7 @@ class Model_Esup_Article_Category extends Model_Esup {
 		'articles'  => array(
 			'model'  => 'Esup_Article',
 			'foreign_key' => 'category_id'
-		),
+		)
 	);
 
     public $options = array(
@@ -20,6 +20,7 @@ class Model_Esup_Article_Category extends Model_Esup {
             'active' => array(
                 'label' => 'Активен',
                 'type' => 'checkbox',
+                'default' => TRUE
             ),
             'title' => array(
                 'label' => 'Заголовок',
@@ -54,13 +55,15 @@ class Model_Esup_Article_Category extends Model_Esup {
             'article_category' => array(
                 'label' => 'Изображение для категории статей',
                 'thumbnails' => array(
-                    '166x166' => array(
-                        'w' => 166,
-                        'h' => 166,
-                        'crop' => array('x' => NULL, 'y' => 0)
-                    ),
+                    '200x150' => array(
+                        'w' => 200,
+                        'h' => 150,
+                        'background' => array(
+                            'color' => '#F1F1F1'
+                        )
+                    )
                 ),
-                'esup_thumbnail' => '166x166',
+                'esup_thumbnail' => '200x150'
             )
         ),
         /* Фильтры */

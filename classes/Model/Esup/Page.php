@@ -7,14 +7,15 @@ class Model_Esup_Page extends Model_Esup {
 		'menu' => array(
 			'model'  => 'Esup_Menu',
 			'foreign_key' => 'page_id'
-		),
+		)
 	);
 
 	public $options = array(
 		'fields' => array(
             'active' => array(
                 'label' => 'Активен',
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'default' => TRUE
             ),
 			'title' => array(
 				'label' => 'Заголовок',

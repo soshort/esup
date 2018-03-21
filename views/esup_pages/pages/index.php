@@ -54,16 +54,3 @@
 		)) ?>
 	</div>
 </div>
-<script type="text/javascript">
-	$(function(){
-		$('table').on('click', '.copy-to-clipboard', function(){
-			var t = $(this),
-				tmp = $('<input>');
-			$('body').append(tmp);
-			tmp.val(t.prev().text()).select();
-			document.execCommand('copy');
-			tmp.remove();
-			return false;
-		});
-	});
-</script>

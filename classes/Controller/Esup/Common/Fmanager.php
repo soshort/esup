@@ -2,21 +2,25 @@
 
 class Controller_Esup_Common_Fmanager extends Controller_Esup_Common {
 
-	public function action_index() {
+	public function action_index()
+	{
 		$this->template->content = View::factory('esup_pages/fmanager/index');
 	}
 
-	public function action_windowed() {
+	public function action_windowed()
+	{
 		$this->template = View::factory('esup_layout/blank');
 		$this->template->content = View::factory('esup_pages/fmanager/blank');
 	}
 
-	public function action_init() {
+	public function action_init()
+	{
 		error_reporting(0);
-		function access($attr, $path, $data, $volume) {
-			return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
-				? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
-				:  NULL;                                    // else elFinder decide it itself
+		function access($attr, $path, $data, $volume)
+		{
+			return (strpos(basename($path), '.') === 0)       // if file/folder begins with '.' (dot)
+				   ? !($attr == 'read' OR $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
+				   : NULL;                                    // else elFinder decide it itself
 		}
 		$opts = array(
 			// 'debug' => true,

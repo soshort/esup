@@ -20,7 +20,8 @@ class Model_Esup_Social extends Model_Esup {
 		'fields' => array(
             'active' => array(
                 'label' => 'Активен',
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'default' => TRUE
             ),
 			'title' => array(
 				'label' => 'Заголовок',
@@ -35,8 +36,8 @@ class Model_Esup_Social extends Model_Esup {
 		),
 		'files' => array(
 			'social' => array(
-				'label' => 'Изображение',
-			),
+				'label' => 'Изображение'
+			)
 		),
 		'filters' => array(
 			'search_query' => array(

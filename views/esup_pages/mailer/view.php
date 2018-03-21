@@ -11,7 +11,7 @@
 			<tr>
 				<th style="width: 20%">Email</th>
 				<td>
-					<?php if ($model->_to[0] == '{' || $model->_to[0] == '['): ?>
+					<?php if ($model->_to[0] == '{' OR $model->_to[0] == '['): ?>
 						<?php $arr = json_decode($model->_to, TRUE); foreach ($arr as $e_key => $email): ?>
 							<?php echo $email; echo (count($arr) == $e_key + 1) ? ',' : '' ?>
 						<?php endforeach ?>

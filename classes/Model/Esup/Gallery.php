@@ -7,14 +7,15 @@ class Model_Esup_Gallery extends Model_Esup {
 		'files'  => array(
 			'model'  => 'Esup_Common_File',
 			'foreign_key' => 'item_id'
-		),
+		)
 	);
 
 	public $options = array(
 		'fields' => array(
             'active' => array(
                 'label' => 'Активен',
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'default' => TRUE
             ),
 			'title' => array(
 				'label' => 'Заголовок',
@@ -54,19 +55,20 @@ class Model_Esup_Gallery extends Model_Esup {
 				'label' => 'Изображения галереи',
 				'multiple' => TRUE,
 				'thumbnails' => array(
-					'400x300' => array(
-						'w' => 400,
-						'h' => 300,
-						'crop' => array('x' => NULL, 'y' => 0)
+					'640x480' => array(
+						'w' => 640,
+						'h' => 480,
+                        'background' => array(
+                            'color' => '#F1F1F1'
+                        )
 					),
 					'1280x' => array(
 						'w' => 1280,
-						'h' => NULL,
-						//'crop' => array('x' => NULL, 'y' => 0)
-					),
+						'h' => NULL
+					)
 				),
-				'esup_thumbnail' => '400x300',
-				'esup_fullsize' => '1280x',
+				'multiple' => TRUE,
+				'esup_thumbnail' => '640x480'
 			)
 		),
         'filters' => array(

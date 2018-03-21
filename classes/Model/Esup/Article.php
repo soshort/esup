@@ -13,7 +13,7 @@ class Model_Esup_Article extends Model_Esup {
 		'files' => array(
 			'model'  => 'Esup_Common_File',
 			'foreign_key' => 'item_id'
-		),
+		)
 	);
 
 	public $options = array(
@@ -21,6 +21,7 @@ class Model_Esup_Article extends Model_Esup {
             'active' => array(
                 'label' => 'Активен',
                 'type' => 'checkbox',
+                'default' => TRUE
             ),
 			'title' => array(
 				'label' => 'Заголовок',
@@ -80,40 +81,38 @@ class Model_Esup_Article extends Model_Esup {
 			'article_image' => array(
 				'label' => 'Изображение статьи',
 				'thumbnails' => array(
-					'400x300' => array(
-						'w' => 400,
-						'h' => 300,
-						'crop' => array('x' => NULL, 'y' => 0)
+					'640x480' => array(
+						'w' => 640,
+						'h' => 480,
+                        'background' => array(
+                            'color' => '#F1F1F1'
+                        )
 					),
 					'1280x' => array(
 						'w' => 1280,
-						'h' => NULL,
+						'h' => NULL
 					)
 				),
-				'remove_original' => TRUE,
-				'esup_thumbnail' => '400x300',
-				'esup_fullsize' => '1280x',
-				'multiple' => TRUE
+				'multiple' => TRUE,
+				'esup_thumbnail' => '640x480'
 			),
 		),
 		'filters' => array(
-			'search_query' => array(
-				'type' => 'text',
-				'fields' => array('title', 'link'), // Может быть массивом, например: array('title', 'text')
-				'render' => array(
-					'title' => 'Поиск'
-				)
-			),
 			'category_id' => array(
 				'type' => 'select2',
 				'model' => 'Esup_Article_Category',
 				'fields' => 'category_id',
 				'render' => array(
-					'title' => 'Категория',
-					'title_field' => 'title',
-					'value_field' => 'id',
-					'order_field' => 'sort',
-					'order_direction' => 'ASC'
+					'model_title_field' => 'title',
+					'model_value_field' => 'id',
+					'title' => 'Категория'
+				)
+			),
+			'search_query' => array(
+				'type' => 'text',
+				'fields' => array('title', 'link'), // Может быть массивом, например: array('title', 'text')
+				'render' => array(
+					'title' => 'Поиск'
 				)
 			)
 		),

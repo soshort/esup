@@ -20,11 +20,3 @@
 		</form>
 	</div>
 </div>
-<script type="text/javascript">
-	$(function(){
-		$(document).on('click', '.filter-list .card-header', function(){
-			var t = $(this);
-			t.next().slideToggle(200);
-		});
-	});
-</script>

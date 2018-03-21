@@ -15,11 +15,3 @@
 		<?php echo HTML::entities($raw_sitemap) ?>
 	</pre>
 </div>
-<script type="text/javascript">
-	$(function(){
-		$('.trigger_xml').click(function(){
-			$(this).parent().next().slideToggle('fast');
-		});
-		return false;
-	});
-</script>

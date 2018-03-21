@@ -1,7 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 return array(
-    'files_dir' => DOCROOT.'static'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR,
+    'files' => array(
+        'dir' => DOCROOT.'static'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR,
+        'images' => array(
+            'max_width' => 1920,
+            'max_height' => 1080
+        )
+    ),
     'multilingual_models' => array(
         'Esup_Common_Text',
         'Esup_Common_File',
@@ -69,7 +75,7 @@ return array(
                 array(
                     'text' => 'Администраторы',
                     'link' => 'administrators',
-                    'access_level' => 10
+                    'access_level' => 0
                 ),
                 array(
                     'text' => 'Файловый менеджер',
@@ -84,7 +90,7 @@ return array(
                 array(
                     'text' => 'Текст на сайте',
                     'link' => 'text',
-                    'access_level' => 0
+                    'access_level' => 10
                 ),
                 array(
                     'text' => 'Письма',

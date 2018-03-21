@@ -3,7 +3,9 @@
 	<a href="/esup/<?php echo $model->options['render']['link'] ?>/add<?php echo $url_query ?>">Добавить</a>
 </h3>
 <?php if (isset($model->options['filters'])): ?>
-	<?php echo View::factory('esup_pieces/filters/filter_list', array('model' => $model)) ?>
+	<?php echo View::factory('esup_pieces/filters/filter_list', array(
+		'model' => $model
+	)) ?>
 <?php endif ?>
 <?php if (isset($model->options['render']['tree_structure'])): ?>
 	<?php echo View::factory('esup_pieces/breadcrumbs', array(
